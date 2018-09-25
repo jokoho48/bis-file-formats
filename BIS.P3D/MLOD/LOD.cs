@@ -1,21 +1,16 @@
-﻿using BIS.Core.Math;
-using BIS.Core.Streams;
+﻿#region
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using BIS.Core.Math;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.P3D.MLOD
 {
     public class P3DM_LOD
     {
-        private int Flags { get; set; }
-        public int Version { get; private set; }
-        public Point[] Points { get; private set; }
-        public Vector3P[] Normals { get; private set; }
-        public Face[] Faces { get; private set; }
-        public LinkedList<Tagg> Taggs { get; private set; }
-        public float Resolution { get; private set; }
-
         public P3DM_LOD(BinaryReaderEx input)
         {
             Read(input);
@@ -31,19 +26,27 @@ namespace BIS.P3D.MLOD
             Resolution = resolution;
         }
 
+        private int Flags { get; set; }
+        public int Version { get; private set; }
+        public Point[] Points { get; private set; }
+        public Vector3P[] Normals { get; private set; }
+        public Face[] Faces { get; private set; }
+        public LinkedList<Tagg> Taggs { get; private set; }
+        public float Resolution { get; private set; }
+
         public void Read(BinaryReaderEx input)
         {
             if (input.ReadAscii(4) != "P3DM")
                 throw new ArgumentException("Only P3DM LODs are supported");
 
-            var headerSize = input.ReadInt32();
+            int headerSize = input.ReadInt32();
             Version = input.ReadInt32();
 
             if (headerSize != 28 || Version != 0x100)
                 throw new ArgumentOutOfRangeException("Unknown P3DM version");
-            var nPoints = input.ReadInt32();
-            var nNormals = input.ReadInt32();
-            var nFaces = input.ReadInt32();
+            int nPoints = input.ReadInt32();
+            int nNormals = input.ReadInt32();
+            int nFaces = input.ReadInt32();
 
             Flags = input.ReadInt32();
             Points = new Point[nPoints];
@@ -53,11 +56,13 @@ namespace BIS.P3D.MLOD
             {
                 Points[i] = new Point(input);
             }
+
             for (int i = 0; i < nNormals; ++i)
             {
                 Normals[i] = new Vector3P(input);
             }
-            for (int i = 0;  i < nFaces; ++i)
+
+            for (int i = 0; i < nFaces; ++i)
             {
                 Faces[i] = new Face(input);
             }
@@ -71,17 +76,16 @@ namespace BIS.P3D.MLOD
             {
                 mlodTagg = Tagg.ReadTagg(input, nPoints, Faces);
                 Taggs.AddLast(mlodTagg);
-            }
-            while (!(mlodTagg is EOFTagg));
+            } while (!(mlodTagg is EOFTagg));
 
             Resolution = input.ReadSingle();
         }
 
         public void Write(BinaryWriterEx output)
         {
-            var nPoints = Points.Length;
-            var nNormals = Normals.Length;
-            var nFaces = Faces.Length;
+            int nPoints = Points.Length;
+            int nNormals = Normals.Length;
+            int nFaces = Faces.Length;
 
             output.WriteAscii("P3DM", 4);
             output.Write(28); //headerSize

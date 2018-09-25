@@ -1,19 +1,15 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
 using System;
-using System.Collections.Generic;
 using System.Text;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.PBO
 {
     public class FileEntry
     {
-        public string FileName { get; set; }
-        public int CompressedMagic { get; set; }
-        public int UncompressedSize { get; set; }
-        public int StartOffset { get; set; }
-        public int TimeStamp { get; set; }
-        public int DataSize { get; set; }
-
         public static int VersionMagic = BitConverter.ToInt32(Encoding.ASCII.GetBytes("sreV"), 0); //Vers
         public static int CompressionMagic = BitConverter.ToInt32(Encoding.ASCII.GetBytes("srpC"), 0); //Cprs
         public static int EncryptionMagic = BitConverter.ToInt32(Encoding.ASCII.GetBytes("rcnE"), 0); //Encr
@@ -27,10 +23,21 @@ namespace BIS.PBO
             TimeStamp = 0;
             DataSize = 0;
         }
+
         public FileEntry(BinaryReaderEx input)
         {
             Read(input);
         }
+
+        public string FileName { get; set; }
+        public int CompressedMagic { get; set; }
+        public int UncompressedSize { get; set; }
+        public int StartOffset { get; set; }
+        public int TimeStamp { get; set; }
+        public int DataSize { get; set; }
+
+        public bool IsVersion => CompressedMagic == VersionMagic && TimeStamp == 0 && DataSize == 0;
+        public bool IsCompressed => CompressedMagic == CompressionMagic;
 
         public void Read(BinaryReaderEx input)
         {
@@ -51,8 +58,5 @@ namespace BIS.PBO
             output.Write(TimeStamp);
             output.Write(DataSize);
         }
-
-        public bool IsVersion => CompressedMagic == VersionMagic && TimeStamp == 0 && DataSize == 0;
-        public bool IsCompressed => CompressedMagic == CompressionMagic;
     }
 }

@@ -1,6 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace BIS.P3D
 {
@@ -80,16 +82,17 @@ namespace BIS.P3D
         public const float SHADOW_MAX = 20000.0f;
 
         /// <summary>
-        /// Tells us if the current LOD with given resolution has normal NamedSelections (returns true) or empty ones (return false)
+        ///     Tells us if the current LOD with given resolution has normal NamedSelections (returns true) or empty ones (return
+        ///     false)
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
         public static bool KeepsNamedSelections(float r)
         {
             return r == MEMORY || r == FIRE_GEOMETRY || r == GEOMETRY
-                || r == VIEW_GEOMETRY || r == VIEW_GEOMETRY_PILOT || r == VIEW_GEOMETRY_GUNNER
-                || r == VIEW_GEOMETRY_CARGO || r == PATHS || r == HITPOINTS
-                || r == PHYSX || r == BUOYANCY;
+                   || r == VIEW_GEOMETRY || r == VIEW_GEOMETRY_PILOT || r == VIEW_GEOMETRY_GUNNER
+                   || r == VIEW_GEOMETRY_CARGO || r == PATHS || r == HITPOINTS
+                   || r == PHYSX || r == BUOYANCY;
         }
 
         public static LodName GetLODType(this float res)
@@ -131,14 +134,13 @@ namespace BIS.P3D
 
         public static string GetLODName(this float res)
         {
-            var lodType = res.GetLODType();
+            LodName lodType = res.GetLODType();
 
             if (lodType == LodName.Resolution)
                 return res.ToString("0.000");
             if (lodType == LodName.ShadowVolume)
                 return "ShadowVolume" + (res - 10000f).ToString("0.000");
-            else
-                return Enum.GetName(typeof(LodName), lodType);
+            return Enum.GetName(typeof(LodName), lodType);
         }
 
         public static bool IsResolution(float r)
@@ -148,19 +150,19 @@ namespace BIS.P3D
 
         public static bool IsShadow(float r)
         {
-            return (r >= SHADOW_MIN && r < SHADOW_MAX) ||
-                r == SHADOWVOLUME_GUNNER ||
-                r == SHADOWVOLUME_PILOT ||
-                r == SHADOWVOLUME_CARGO;
+            return r >= SHADOW_MIN && r < SHADOW_MAX ||
+                   r == SHADOWVOLUME_GUNNER ||
+                   r == SHADOWVOLUME_PILOT ||
+                   r == SHADOWVOLUME_CARGO;
         }
 
         public static bool IsVisual(float r)
         {
             return IsResolution(r) ||
-                r == VIEW_CARGO ||
-                r == VIEW_GUNNER ||
-                r == VIEW_PILOT ||
-                r == VIEW_COMMANDER;
+                   r == VIEW_CARGO ||
+                   r == VIEW_GUNNER ||
+                   r == VIEW_PILOT ||
+                   r == VIEW_COMMANDER;
         }
     }
 }

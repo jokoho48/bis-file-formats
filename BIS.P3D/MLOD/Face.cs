@@ -1,5 +1,9 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
 using System;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.P3D.MLOD
 {
@@ -19,12 +23,6 @@ namespace BIS.P3D.MLOD
 
     public class Face
     {
-        public int VertexCount { get; private set; }
-        public Vertex[] Vertices { get; private set; }
-        public FaceFlags Flags { get; private set; }
-        public string Texture { get; private set; }
-        public string Material { get; private set; }
-
         public Face(int nVerts, Vertex[] verts, FaceFlags flags, string texture, string material)
         {
             VertexCount = nVerts;
@@ -39,6 +37,12 @@ namespace BIS.P3D.MLOD
             Read(input);
         }
 
+        public int VertexCount { get; private set; }
+        public Vertex[] Vertices { get; private set; }
+        public FaceFlags Flags { get; private set; }
+        public string Texture { get; private set; }
+        public string Material { get; private set; }
+
         public void Read(BinaryReaderEx input)
         {
             VertexCount = input.ReadInt32();
@@ -47,7 +51,8 @@ namespace BIS.P3D.MLOD
             {
                 Vertices[i] = new Vertex(input);
             }
-            Flags = (FaceFlags)input.ReadInt32();
+
+            Flags = (FaceFlags) input.ReadInt32();
             Texture = input.ReadAsciiz();
             Material = input.ReadAsciiz();
         }
@@ -66,7 +71,7 @@ namespace BIS.P3D.MLOD
                     output.Write(0);
                 }
 
-            output.Write((int)Flags);
+            output.Write((int) Flags);
             output.WriteAsciiz(Texture);
             output.WriteAsciiz(Material);
         }

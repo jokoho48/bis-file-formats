@@ -1,36 +1,22 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
-using BIS.Core.Streams;
 using BIS.Core;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.PBO
 {
     public class PBO
     {
-        private static FileEntry VersionEntry;
-        private static FileEntry EmptyEntry;
+        private static readonly FileEntry VersionEntry;
+        private static readonly FileEntry EmptyEntry;
 
         private FileStream pboFileStream;
-
-        public string PBOFilePath { get; private set; }
-
-        public FileStream PBOFileStream
-        {
-            get
-            {
-                pboFileStream = pboFileStream ?? File.OpenRead(PBOFilePath);
-                return pboFileStream;
-            }
-        }
-        public LinkedList<FileEntry> FileEntries { get; } = new LinkedList<FileEntry>();
-        public LinkedList<string> Properties { get; } = new LinkedList<string>();
-        public int DataOffset { get; private set; }
-        public string Prefix { get; private set; }
- 
-        public string FileName => Path.GetFileName(PBOFilePath);
 
         static PBO()
         {
@@ -46,7 +32,7 @@ namespace BIS.PBO
         public PBO(string fileName, bool keepStreamOpen = false)
         {
             PBOFilePath = fileName;
-            var input = new BinaryReaderEx(PBOFileStream);
+            BinaryReaderEx input = new BinaryReaderEx(PBOFileStream);
             ReadHeader(input);
             if (!keepStreamOpen)
             {
@@ -54,6 +40,24 @@ namespace BIS.PBO
                 pboFileStream = null;
             }
         }
+
+        public string PBOFilePath { get; }
+
+        public FileStream PBOFileStream
+        {
+            get
+            {
+                pboFileStream = pboFileStream ?? File.OpenRead(PBOFilePath);
+                return pboFileStream;
+            }
+        }
+
+        public LinkedList<FileEntry> FileEntries { get; } = new LinkedList<FileEntry>();
+        public LinkedList<string> Properties { get; } = new LinkedList<string>();
+        public int DataOffset { get; private set; }
+        public string Prefix { get; private set; }
+
+        public string FileName => Path.GetFileName(PBOFilePath);
 
         private void ReadHeader(BinaryReaderEx input)
         {
@@ -83,18 +87,16 @@ namespace BIS.PBO
 
                         if (name == "prefix")
                             Prefix = value;
-                    }
-                    while (name != "");
+                    } while (name != "");
 
                     if (Properties.Count % 2 != 0)
                         throw new Exception("metaData count is not even.");
                 }
                 else if (pboEntry.FileName != "")
                     FileEntries.AddLast(pboEntry);
-            }
-            while (pboEntry.FileName != "" || FileEntries.Count == 0);
+            } while (pboEntry.FileName != "" || FileEntries.Count == 0);
 
-            DataOffset = (int)input.Position;
+            DataOffset = (int) input.Position;
         }
 
         private byte[] GetFileData(FileEntry entry)
@@ -111,8 +113,8 @@ namespace BIS.PBO
                 if (!entry.IsCompressed)
                     throw new Exception("Unexpected packingMethod");
 
-                var br = new BinaryReaderEx(PBOFileStream);
-                bytes = br.ReadLZSS((uint)entry.UncompressedSize);
+                BinaryReaderEx br = new BinaryReaderEx(PBOFileStream);
+                bytes = br.ReadLZSS((uint) entry.UncompressedSize);
             }
 
             return bytes;
@@ -120,12 +122,12 @@ namespace BIS.PBO
 
         public void ExtractFile(FileEntry entry, string dst)
         {
-            ExtractFiles(Methods.Yield(entry), dst);
+            ExtractFiles(entry.Yield(), dst);
         }
 
         public void ExtractFiles(IEnumerable<FileEntry> entries, string dst, bool keepStreamOpen = false)
         {
-            foreach (var entry in entries.OrderBy(e => e.StartOffset))
+            foreach (FileEntry entry in entries.OrderBy(e => e.StartOffset))
             {
                 if (entry.DataSize <= 0) continue;
                 string path = Path.Combine(dst, entry.FileName);
@@ -142,18 +144,19 @@ namespace BIS.PBO
 
         public void ExtractAllFiles(string directory)
         {
-            var dstPath = Path.Combine(directory, Prefix);
+            string dstPath = Path.Combine(directory, Prefix);
             ExtractFiles(FileEntries, dstPath);
         }
 
         public MemoryStream GetFileEntryStream(FileEntry entry)
         {
-            return GetFileEntryStreams(Methods.Yield(entry)).First();
+            return GetFileEntryStreams(entry.Yield()).First();
         }
 
-        public IEnumerable<MemoryStream> GetFileEntryStreams(IEnumerable<FileEntry> entries, bool keepStreamOpen = false)
+        public IEnumerable<MemoryStream> GetFileEntryStreams(IEnumerable<FileEntry> entries,
+            bool keepStreamOpen = false)
         {
-            foreach (var entry in entries)
+            foreach (FileEntry entry in entries)
             {
                 if (entry.DataSize <= 0) continue;
                 yield return new MemoryStream(GetFileData(entry), false);
@@ -173,7 +176,7 @@ namespace BIS.PBO
 
         private static void WriteBasicHeader(BinaryWriterEx output, IEnumerable<FileEntry> fileEntries)
         {
-            foreach (var entry in fileEntries)
+            foreach (FileEntry entry in fileEntries)
             {
                 entry.Write(output);
             }
@@ -191,11 +194,12 @@ namespace BIS.PBO
             //create starting entry
             VersionEntry.Write(output);
 
-            foreach (var e in properties)
+            foreach (string e in properties)
             {
                 output.WriteAsciiz(e);
             }
-            output.Write((byte)0); //empty string
+
+            output.Write((byte) 0); //empty string
         }
 
         private void WriteHeader(BinaryWriterEx output)
@@ -206,12 +210,12 @@ namespace BIS.PBO
 
         public static IEnumerable<KeyValuePair<FileEntry, PBO>> GetAllNonEmptyFileEntries(string path)
         {
-            var allPBOs = Directory.GetFiles(path, "*.pbo", SearchOption.AllDirectories);
+            string[] allPBOs = Directory.GetFiles(path, "*.pbo", SearchOption.AllDirectories);
 
-            foreach (var pboPath in allPBOs)
+            foreach (string pboPath in allPBOs)
             {
-                var pbo = new PBO(pboPath);
-                foreach (var entry in pbo.FileEntries)
+                PBO pbo = new PBO(pboPath);
+                foreach (FileEntry entry in pbo.FileEntries)
                 {
                     if (entry.DataSize > 0)
                         yield return new KeyValuePair<FileEntry, PBO>(entry, pbo);

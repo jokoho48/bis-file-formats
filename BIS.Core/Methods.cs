@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿#region
 
+using System.Collections.Generic;
+using System.Linq;
 using static System.Math;
+
+#endregion
 
 namespace BIS.Core
 {
@@ -9,14 +12,14 @@ namespace BIS.Core
     {
         public static void Swap<T>(ref T v1, ref T v2)
         {
-            var tmp = v1;
+            T tmp = v1;
             v1 = v2;
             v2 = tmp;
         }
 
         public static bool EqualsFloat(float f1, float f2, float tolerance = 0.0001f)
         {
-            var dif = Abs(f1 - f2);
+            float dif = Abs(f1 - f2);
             if (dif <= tolerance) return true;
             return false;
         }

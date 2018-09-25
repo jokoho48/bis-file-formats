@@ -1,28 +1,31 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
+﻿#region
 
-using BIS.Core.Streams;
+using System;
+using System.IO;
 using BIS.Core.Math;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.RTM
 {
     public class RTM
     {
+        public RTM(string fileName) : this(File.OpenRead(fileName))
+        {
+        }
+
+        public RTM(Stream stream)
+        {
+            BinaryReaderEx input = new BinaryReaderEx(stream);
+            Read(input);
+            input.Close();
+        }
+
         public Vector3P Displacement { get; private set; }
         public string[] BoneNames { get; private set; }
         public float[] FrameTimes { get; private set; }
         public Matrix4P[,] FrameTransforms { get; private set; }
-
-        public RTM(string fileName) : this(File.OpenRead(fileName)) { }
-
-        public RTM(Stream stream)
-        {
-            var input = new BinaryReaderEx(stream);
-            Read(input);
-            input.Close();
-        }
 
         private void Read(BinaryReaderEx input)
         {
@@ -31,6 +34,7 @@ namespace BIS.RTM
                 ReadRTM(input);
                 return;
             }
+
             throw new FormatException("No RTM signature found");
         }
 
@@ -39,8 +43,8 @@ namespace BIS.RTM
             output.WriteAscii("RTM_0101", 8);
             Displacement.Write(output);
 
-            var nFrames = FrameTimes.Length;
-            var nBones = BoneNames.Length;
+            int nFrames = FrameTimes.Length;
+            int nBones = BoneNames.Length;
 
             output.Write(nFrames);
             output.Write(nBones);
@@ -50,7 +54,7 @@ namespace BIS.RTM
 
             for (int frame = 0; frame < nFrames; frame++)
             {
-                output.Write(FrameTimes[frame]); 
+                output.Write(FrameTimes[frame]);
                 for (int b = 0; b < nBones; b++)
                 {
                     output.WriteAscii(BoneNames[b], 32);
@@ -62,11 +66,11 @@ namespace BIS.RTM
         private void ReadRTM(BinaryReaderEx input)
         {
             Displacement = new Vector3P(input);
-            var nFrames = input.ReadInt32();
+            int nFrames = input.ReadInt32();
 
-            BoneNames = input.ReadArray( inp => inp.ReadAscii(32) );
+            BoneNames = input.ReadArray(inp => inp.ReadAscii(32));
 
-            var nBones = BoneNames.Length;
+            int nBones = BoneNames.Length;
 
             FrameTimes = new float[nFrames];
             FrameTransforms = new Matrix4P[nFrames, nBones];
@@ -83,7 +87,7 @@ namespace BIS.RTM
 
         public void WriteToFile(string file)
         {
-            var output = new BinaryWriterEx(File.OpenWrite(file));
+            BinaryWriterEx output = new BinaryWriterEx(File.OpenWrite(file));
             Write(output);
             output.Close();
         }

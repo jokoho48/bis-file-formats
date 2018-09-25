@@ -1,14 +1,15 @@
-﻿using BIS.Core.Math;
-using BIS.Core.Streams;
+﻿#region
+
 using System;
+using BIS.Core.Math;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.P3D.MLOD
 {
     public abstract class Tagg
     {
-        public string Name { get; set; }
-        public uint DataSize { get; set; }
-
         protected Tagg(uint dataSize, string taggName)
         {
             Name = taggName;
@@ -24,6 +25,9 @@ namespace BIS.P3D.MLOD
             DataSize = input.ReadUInt32();
         }
 
+        public string Name { get; set; }
+        public uint DataSize { get; set; }
+
         protected void WriteHeader(BinaryWriterEx output)
         {
             output.Write(true);
@@ -37,7 +41,7 @@ namespace BIS.P3D.MLOD
         {
             if (!input.ReadBoolean())
                 throw new Exception("Deactivated Tagg?");
-            var taggName = input.ReadAsciiz();
+            string taggName = input.ReadAsciiz();
             input.Position -= taggName.Length + 2;
 
             switch (taggName)
@@ -66,10 +70,8 @@ namespace BIS.P3D.MLOD
 
     public class AnimationTagg : Tagg
     {
-        public float FrameTime { get; set; }
-        public Vector3P[] FramePoints { get; set; }
-
-        public AnimationTagg(float frameTime, Vector3P[] framePoints) : base((uint)(framePoints.Length * 4 + 4), "#Animation#")
+        public AnimationTagg(float frameTime, Vector3P[] framePoints) : base((uint) (framePoints.Length * 4 + 4),
+            "#Animation#")
         {
             FrameTime = frameTime;
             FramePoints = framePoints;
@@ -80,9 +82,12 @@ namespace BIS.P3D.MLOD
             Read(input);
         }
 
+        public float FrameTime { get; set; }
+        public Vector3P[] FramePoints { get; set; }
+
         public void Read(BinaryReaderEx input)
         {
-            var num = (DataSize - 4) / 12;
+            uint num = (DataSize - 4) / 12;
             FrameTime = input.ReadSingle();
             FramePoints = new Vector3P[num];
             for (int i = 0; i < num; ++i)
@@ -100,13 +105,13 @@ namespace BIS.P3D.MLOD
 
     public class LockTagg : Tagg
     {
-        public bool[] LockedPoints { get; private set; }
-        public bool[] LockedFaces { get; private set; }
-
         public LockTagg(BinaryReaderEx input, int nPoints, int nFaces) : base(input)
         {
             Read(input, nPoints, nFaces);
         }
+
+        public bool[] LockedPoints { get; private set; }
+        public bool[] LockedFaces { get; private set; }
 
         public void Read(BinaryReaderEx input, int nPoints, int nFaces)
         {
@@ -130,17 +135,17 @@ namespace BIS.P3D.MLOD
 
     public class MassTagg : Tagg
     {
-        public float[] Mass { get; set; }
-
-        public MassTagg(float[] mass): base((uint)(mass.Length * 4), "#Mass#")
+        public MassTagg(float[] mass) : base((uint) (mass.Length * 4), "#Mass#")
         {
             Mass = mass;
         }
 
-        public MassTagg(BinaryReaderEx input): base(input)
+        public MassTagg(BinaryReaderEx input) : base(input)
         {
             Read(input);
         }
+
+        public float[] Mass { get; set; }
 
         public void Read(BinaryReaderEx input)
         {
@@ -161,10 +166,8 @@ namespace BIS.P3D.MLOD
 
     public class NamedSelectionTagg : Tagg
     {
-        public byte[] Points { get; set; }
-        public byte[] Faces { get; set; }
-
-        public NamedSelectionTagg(string name, byte[] points, byte[] faces) : base((uint)(points.Length + faces.Length), name)
+        public NamedSelectionTagg(string name, byte[] points, byte[] faces) : base(
+            (uint) (points.Length + faces.Length), name)
         {
             Points = points;
             Faces = faces;
@@ -175,6 +178,9 @@ namespace BIS.P3D.MLOD
             Read(input, nPoints, nFaces);
         }
 
+        public byte[] Points { get; set; }
+        public byte[] Faces { get; set; }
+
         public void Read(BinaryReaderEx input, int nPoints, int nFaces)
         {
             Points = new byte[nPoints];
@@ -184,6 +190,7 @@ namespace BIS.P3D.MLOD
             for (int index = 0; index < nFaces; ++index)
                 Faces[index] = input.ReadByte();
         }
+
         public override void Write(BinaryWriterEx output)
         {
             WriteHeader(output);
@@ -196,10 +203,7 @@ namespace BIS.P3D.MLOD
 
     public class PropertyTagg : Tagg
     {
-        public string PropertyName { get; set; }
-        public string Value { get; set; }
-
-        public PropertyTagg(string prop, string val) : base(128,"#Property#")
+        public PropertyTagg(string prop, string val) : base(128, "#Property#")
         {
             PropertyName = prop;
             Value = val;
@@ -209,6 +213,9 @@ namespace BIS.P3D.MLOD
         {
             Read(input);
         }
+
+        public string PropertyName { get; set; }
+        public string Value { get; set; }
 
         public void Read(BinaryReaderEx input)
         {
@@ -223,15 +230,16 @@ namespace BIS.P3D.MLOD
             output.WriteAscii(Value, 64);
         }
     }
+
     public class SelectedTagg : Tagg
     {
-        public byte[] WeightedPoints { get; set; }
-        public byte[] Faces { get; set; }
-
         public SelectedTagg(BinaryReaderEx input, int nPoints, int nFaces) : base(input)
         {
             Read(input, nPoints, nFaces);
         }
+
+        public byte[] WeightedPoints { get; set; }
+        public byte[] Faces { get; set; }
 
         public void Read(BinaryReaderEx input, int nPoints, int nFaces)
         {
@@ -252,18 +260,19 @@ namespace BIS.P3D.MLOD
                 output.Write(Faces[index]);
         }
     }
+
     public class SharpEdgesTagg : Tagg
     {
-        public int[,] PointIndices { get; private set; }
-
         public SharpEdgesTagg(BinaryReaderEx input) : base(input)
         {
             Read(input);
         }
 
+        public int[,] PointIndices { get; private set; }
+
         public void Read(BinaryReaderEx input)
         {
-            var num = DataSize / 8;
+            uint num = DataSize / 8;
             PointIndices = new int[num, 2];
             for (int index = 0; index < num; ++index)
             {
@@ -275,7 +284,7 @@ namespace BIS.P3D.MLOD
         public override void Write(BinaryWriterEx output)
         {
             WriteHeader(output);
-            var num = DataSize / 8;
+            uint num = DataSize / 8;
             for (int index = 0; index < num; ++index)
             {
                 output.Write(PointIndices[index, 0]);
@@ -286,10 +295,7 @@ namespace BIS.P3D.MLOD
 
     public class UVSetTagg : Tagg
     {
-        public int UvSetNr { get; set; }
-        public float[][,] FaceUVs { get; set; }
-
-        public UVSetTagg(uint dataSize, int uvNr, float[][,] uvs): base(dataSize, "#UVSet#")
+        public UVSetTagg(uint dataSize, int uvNr, float[][,] uvs) : base(dataSize, "#UVSet#")
         {
             UvSetNr = uvNr;
             FaceUVs = uvs;
@@ -299,6 +305,9 @@ namespace BIS.P3D.MLOD
         {
             Read(input, faces);
         }
+
+        public int UvSetNr { get; set; }
+        public float[][,] FaceUVs { get; set; }
 
         public void Read(BinaryReaderEx input, Face[] faces)
         {
@@ -332,9 +341,13 @@ namespace BIS.P3D.MLOD
 
     public class EOFTagg : Tagg
     {
-        public EOFTagg(): base(0, "#EndOfFile#") {}
+        public EOFTagg() : base(0, "#EndOfFile#")
+        {
+        }
 
-        public EOFTagg(BinaryReaderEx input) : base(input) {}
+        public EOFTagg(BinaryReaderEx input) : base(input)
+        {
+        }
 
         public override void Write(BinaryWriterEx output)
         {

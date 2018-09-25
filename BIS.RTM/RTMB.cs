@@ -1,7 +1,11 @@
-﻿using BIS.Core.Math;
-using BIS.Core.Streams;
+﻿#region
+
 using System;
 using System.Linq;
+using BIS.Core.Math;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.RTM
 {
@@ -32,9 +36,9 @@ namespace BIS.RTM
 
             Reversed = input.ReadBoolean();
             Step = new Vector3P(input);
-            var nPhases = input.ReadInt32();
+            int nPhases = input.ReadInt32();
             PreloadCount = input.ReadInt32();
-            var nAnimatedBones = input.ReadInt32();
+            int nAnimatedBones = input.ReadInt32();
             BoneNames = input.ReadStringArray();
 
             //metadata
@@ -45,7 +49,8 @@ namespace BIS.RTM
             }
 
             PhaseTimes = input.ReadCompressedFloatArray();
-            Phases = Enumerable.Range(0, nPhases).Select(_ => input.ReadCompressedArray(inp => Matrix4P.ReadMatrix4Quat16b(inp), 14)).ToArray();
+            Phases = Enumerable.Range(0, nPhases)
+                .Select(_ => input.ReadCompressedArray(inp => Matrix4P.ReadMatrix4Quat16b(inp), 14)).ToArray();
         }
     }
 }

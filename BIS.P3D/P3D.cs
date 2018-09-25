@@ -1,8 +1,8 @@
-﻿using BIS.Core.Math;
-using BIS.Core.Streams;
-using System;
+﻿#region
+
 using System.IO;
-using System.Linq;
+
+#endregion
 
 namespace BIS.P3D
 {
@@ -35,7 +35,7 @@ namespace BIS.P3D
     //        get;
     //    }
     //}
-   
+
     public static class P3D
     {
         //public int Version { get; protected set; }
@@ -67,15 +67,17 @@ namespace BIS.P3D
         {
             bool result = false;
             if (stream.ReadByte() == 'O'
-            && stream.ReadByte() == 'D'
-            && stream.ReadByte() == 'O'
-            && stream.ReadByte() == 'L')
-                result = true; ;
+                && stream.ReadByte() == 'D'
+                && stream.ReadByte() == 'O'
+                && stream.ReadByte() == 'L')
+                result = true;
+            ;
 
             stream.Position = 0;
 
             return result;
         }
+
         public static bool IsMLOD(string filePath)
         {
             return IsMLOD(File.OpenRead(filePath));
@@ -85,10 +87,11 @@ namespace BIS.P3D
         {
             bool result = false;
             if (stream.ReadByte() == 'M'
-            && stream.ReadByte() == 'L'
-            && stream.ReadByte() == 'O'
-            && stream.ReadByte() == 'D')
-                result = true; ;
+                && stream.ReadByte() == 'L'
+                && stream.ReadByte() == 'O'
+                && stream.ReadByte() == 'D')
+                result = true;
+            ;
 
             stream.Position = 0;
 

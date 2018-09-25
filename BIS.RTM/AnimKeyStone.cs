@@ -1,4 +1,8 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.RTM
 {
@@ -19,17 +23,17 @@ namespace BIS.RTM
 
     public class AnimKeyStone
     {
-        public AnimKeystoneTypeID ID { get; private set; }
-        public string StringID { get; private set; }
-        public float Time { get; private set; }
-        public string Value { get; private set; }
-
         public AnimKeyStone(BinaryReaderEx input)
         {
-            ID = (AnimKeystoneTypeID)input.ReadInt32();
+            ID = (AnimKeystoneTypeID) input.ReadInt32();
             StringID = input.ReadAsciiz();
             Time = input.ReadSingle();
             Value = input.ReadAsciiz();
         }
+
+        public AnimKeystoneTypeID ID { get; }
+        public string StringID { get; }
+        public float Time { get; }
+        public string Value { get; }
     }
 }

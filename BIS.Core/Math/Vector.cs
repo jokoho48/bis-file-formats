@@ -1,37 +1,28 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.Core.Math
 {
     public struct Vector3P
     {
-        private float x;
-        private float y;
-        private float z;
+        public float X { get; set; }
 
-        public float X
+        public float Y { get; set; }
+
+        public float Z { get; set; }
+
+        public Vector3P(float val) : this(val, val, val)
         {
-            get { return x; }
-            set { x = value; }
         }
 
-        public float Y
+        public Vector3P(BinaryReaderEx input) : this(input.ReadSingle(), input.ReadSingle(), input.ReadSingle())
         {
-            get { return y; }
-            set { y = value; }
         }
-
-        public float Z
-        {
-            get { return z; }
-            set { z = value; }
-        }
-
-        public Vector3P(float val) : this(val, val, val) { }
-
-        public Vector3P(BinaryReaderEx input) : this(input.ReadSingle(), input.ReadSingle(), input.ReadSingle()) { }
 
         public Vector3P(int compressed) : this()
         {
@@ -42,19 +33,19 @@ namespace BIS.Core.Math
             if (x > 511) x -= 1024;
             if (y > 511) y -= 1024;
             if (z > 511) z -= 1024;
-            this.x = (float)(x * scaleFactor);
-            this.y = (float)(y * scaleFactor);
-            this.z = (float)(z * scaleFactor);
+            X = (float) (x * scaleFactor);
+            Y = (float) (y * scaleFactor);
+            Z = (float) (z * scaleFactor);
         }
 
         public Vector3P(float x, float y, float z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
-        public double Length => System.Math.Sqrt(x * x + y * y + z * z);
+        public double Length => System.Math.Sqrt(X * X + Y * Y + Z * Z);
 
         public float this[int i]
         {
@@ -62,11 +53,12 @@ namespace BIS.Core.Math
             {
                 switch (i)
                 {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
+                    case 0: return X;
+                    case 1: return Y;
+                    case 2: return Z;
 
-                    default: throw new ArgumentOutOfRangeException(nameof(i), i, "Index to Vector3P has to be 0, 1 or 2");
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(i), i, "Index to Vector3P has to be 0, 1 or 2");
                 }
             }
 
@@ -74,11 +66,18 @@ namespace BIS.Core.Math
             {
                 switch (i)
                 {
-                    case 0: x = value;return;
-                    case 1: y = value;return;
-                    case 2: z = value;return;
+                    case 0:
+                        X = value;
+                        return;
+                    case 1:
+                        Y = value;
+                        return;
+                    case 2:
+                        Z = value;
+                        return;
 
-                    default: throw new ArgumentOutOfRangeException(nameof(i), i, "Index to Vector3P has to be 0, 1 or 2");
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(i), i, "Index to Vector3P has to be 0, 1 or 2");
                 }
             }
         }
@@ -135,26 +134,30 @@ namespace BIS.Core.Math
 
         public bool Equals(Vector3P other)
         {
-            bool nearlyEqual(float f1, float f2) => System.Math.Abs(f1 - f2) < 0.05;
+            bool nearlyEqual(float f1, float f2)
+            {
+                return System.Math.Abs(f1 - f2) < 0.05;
+            }
 
-            return ( nearlyEqual(X, other.X) && nearlyEqual(Y, other.Y) && nearlyEqual(Z, other.Z));
+            return nearlyEqual(X, other.X) && nearlyEqual(Y, other.Y) && nearlyEqual(Z, other.Z);
         }
 
         public override string ToString()
         {
             CultureInfo cultureInfo = new CultureInfo("en-GB");
-            return "{" + X.ToString(cultureInfo.NumberFormat) + "," + Y.ToString(cultureInfo.NumberFormat) + "," + Z.ToString(cultureInfo.NumberFormat) + "}";
+            return "{" + X.ToString(cultureInfo.NumberFormat) + "," + Y.ToString(cultureInfo.NumberFormat) + "," +
+                   Z.ToString(cultureInfo.NumberFormat) + "}";
         }
 
         public float Distance(Vector3P v)
         {
-            var d = this - v;
-            return (float)System.Math.Sqrt( d.X * d.X + d.Y * d.Y + d.Z * d.Z );
+            Vector3P d = this - v;
+            return (float) System.Math.Sqrt(d.X * d.X + d.Y * d.Y + d.Z * d.Z);
         }
 
         public void Normalize()
         {
-            float l = (float)Length;
+            float l = (float) Length;
             X /= l;
             Y /= l;
             Z /= l;
@@ -162,9 +165,9 @@ namespace BIS.Core.Math
 
         public static Vector3P CrossProduct(Vector3P a, Vector3P b)
         {
-            var x = a.Y * b.Z - a.Z * b.Y;
-            var y = a.Z * b.X - a.X * b.Z;
-            var z = a.X * b.Y - a.Y * b.X;
+            float x = a.Y * b.Z - a.Z * b.Y;
+            float y = a.Z * b.X - a.X * b.Z;
+            float z = a.X * b.Y - a.Y * b.X;
 
             return new Vector3P(x, y, z);
         }
@@ -174,8 +177,8 @@ namespace BIS.Core.Math
     {
         private const float ScaleFactor = -1.0f / 511.0f;
 
-        private int xyz;
-        
+        private readonly int xyz;
+
 
         //public float X
         //{
@@ -216,7 +219,7 @@ namespace BIS.Core.Math
             if (y > 511) y -= 1024;
             if (z > 511) z -= 1024;
 
-            return new Vector3P(x * ScaleFactor, y *  ScaleFactor, z * ScaleFactor);
+            return new Vector3P(x * ScaleFactor, y * ScaleFactor, z * ScaleFactor);
         }
 
         public static implicit operator int(Vector3PCompressed src)
@@ -233,6 +236,7 @@ namespace BIS.Core.Math
         {
             xyz = value;
         }
+
         public Vector3PCompressed(BinaryReaderEx input)
         {
             xyz = input.ReadInt32();

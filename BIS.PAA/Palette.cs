@@ -1,6 +1,10 @@
-﻿using BIS.Core;
-using BIS.Core.Streams;
+﻿#region
+
 using System.Diagnostics;
+using BIS.Core;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.PAA
 {
@@ -8,17 +12,6 @@ namespace BIS.PAA
     {
         public const int PicFlagAlpha = 1;
         public const int PicFlagTransparent = 2;
-
-        public PackedColor[] Colors { get; private set; }
-
-        public PackedColor AverageColor { get; private set; }
-        //! color used to maximize dynamic range
-        public PackedColor MaxColor { get; private set; }
-
-        internal ARGBSwizzle ChannelSwizzle { get; private set; } = ARGBSwizzle.Default;
-
-        public bool IsAlpha { get; private set; }
-        public bool IsTransparent { get; private set; }
 
 
         public Palette(PAAType format)
@@ -37,12 +30,24 @@ namespace BIS.PAA
             }
         }
 
+        public PackedColor[] Colors { get; private set; }
+
+        public PackedColor AverageColor { get; private set; }
+
+        //! color used to maximize dynamic range
+        public PackedColor MaxColor { get; private set; }
+
+        internal ARGBSwizzle ChannelSwizzle { get; private set; } = ARGBSwizzle.Default;
+
+        public bool IsAlpha { get; private set; }
+        public bool IsTransparent { get; private set; }
+
         public void Read(BinaryReaderEx input, int[] startOffsets)
         {
             //read Taggs
             while (input.ReadAscii(4) == "GGAT")
             {
-                var taggName = input.ReadAscii(4);
+                string taggName = input.ReadAscii(4);
                 int taggSize = input.ReadInt32();
 
                 switch (taggName)
@@ -71,14 +76,15 @@ namespace BIS.PAA
                         {
                             startOffsets[i] = input.ReadInt32();
                         }
+
                         break;
                     case "ZIWS": //SWIZ
                         Debug.Assert(taggSize == 4);
                         ARGBSwizzle newSwizzle;
-                        newSwizzle.SwizA = (TexSwizzle)input.ReadByte();
-                        newSwizzle.SwizR = (TexSwizzle)input.ReadByte();
-                        newSwizzle.SwizG = (TexSwizzle)input.ReadByte();
-                        newSwizzle.SwizB = (TexSwizzle)input.ReadByte();
+                        newSwizzle.SwizA = (TexSwizzle) input.ReadByte();
+                        newSwizzle.SwizR = (TexSwizzle) input.ReadByte();
+                        newSwizzle.SwizG = (TexSwizzle) input.ReadByte();
+                        newSwizzle.SwizB = (TexSwizzle) input.ReadByte();
                         ChannelSwizzle = newSwizzle;
                         break;
 
@@ -89,16 +95,17 @@ namespace BIS.PAA
                         break;
                 }
             }
+
             input.Position -= 4;
 
             //read palette colors
-            var nPaletteColors = input.ReadUInt16();
+            ushort nPaletteColors = input.ReadUInt16();
             Colors = new PackedColor[nPaletteColors];
             for (int index = 0; index < nPaletteColors; ++index)
             {
-                var b = input.ReadByte();
-                var g = input.ReadByte();
-                var r = input.ReadByte();
+                byte b = input.ReadByte();
+                byte g = input.ReadByte();
+                byte r = input.ReadByte();
                 Colors[index] = new PackedColor(r, g, b);
             }
         }

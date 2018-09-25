@@ -1,7 +1,11 @@
-﻿using BIS.Core.Math;
-using BIS.Core.Streams;
+﻿#region
+
 using System;
 using System.IO;
+using BIS.Core.Math;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.P3D.MLOD
 {
@@ -42,7 +46,6 @@ namespace BIS.P3D.MLOD
     public class Point
     {
         public Vector3P Position;
-        public PointFlags PointFlags { get; private set; }
 
         public Point(Vector3P pos, PointFlags flags)
         {
@@ -53,23 +56,20 @@ namespace BIS.P3D.MLOD
         public Point(BinaryReaderEx input)
         {
             Position = new Vector3P(input);
-            PointFlags = (PointFlags)input.ReadInt32();
+            PointFlags = (PointFlags) input.ReadInt32();
         }
 
-        public new void Write(BinaryWriterEx output)
+        public PointFlags PointFlags { get; }
+
+        public void Write(BinaryWriterEx output)
         {
             Position.Write(output);
-            output.Write((int)PointFlags);
+            output.Write((int) PointFlags);
         }
     }
 
     public class Vertex
     {
-        public int PointIndex { get; private set; }
-        public int NormalIndex { get; private set; }
-        public float U { get; private set; }
-        public float V { get; private set; }
-
         public Vertex(BinaryReaderEx input)
         {
             Read(input);
@@ -82,6 +82,11 @@ namespace BIS.P3D.MLOD
             U = u;
             V = v;
         }
+
+        public int PointIndex { get; private set; }
+        public int NormalIndex { get; private set; }
+        public float U { get; private set; }
+        public float V { get; private set; }
 
         public void Read(BinaryReaderEx input)
         {

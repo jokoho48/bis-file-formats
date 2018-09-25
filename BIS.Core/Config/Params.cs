@@ -1,14 +1,18 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Globalization;
-
 using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.Core.Config
 {
     #region Enums
+
     public enum EntryType : byte
     {
         Class,
@@ -27,20 +31,22 @@ namespace BIS.Core.Config
         Array, //not used?
         Expression,
         NSpecValueType,
-        Int64,
+        Int64
     }
+
     #endregion
 
     #region ParamEntries
+
     public abstract class ParamEntry
     {
         public string Name { get; protected set; }
 
         public static ParamEntry ReadParamEntry(BinaryReaderEx input)
         {
-            var entryType = (EntryType)input.ReadByte();
+            EntryType entryType = (EntryType) input.ReadByte();
 
-            switch(entryType)
+            switch (entryType)
             {
                 case EntryType.Class:
                     return new ParamClass(input);
@@ -61,15 +67,19 @@ namespace BIS.Core.Config
             }
         }
 
-        public virtual string ToString(int indentionLevel = 0) => base.ToString();
-        public override string ToString() => ToString(0);
+        public virtual string ToString(int indentionLevel = 0)
+        {
+            return base.ToString();
+        }
+
+        public override string ToString()
+        {
+            return ToString(0);
+        }
     }
 
     public class ParamClass : ParamEntry
     {
-        public string BaseClassName { get; private set; }
-        public List<ParamEntry> Entries { get; private set; }
-
         public ParamClass()
         {
             BaseClassName = "";
@@ -84,15 +94,19 @@ namespace BIS.Core.Config
             Entries = entries.ToList();
         }
 
-        public ParamClass(string name, IEnumerable<ParamEntry> entries): this(name, "", entries) { }
+        public ParamClass(string name, IEnumerable<ParamEntry> entries) : this(name, "", entries)
+        {
+        }
 
-        public ParamClass(string name, params ParamEntry[] entries) : this(name, (IEnumerable<ParamEntry>)entries) { }
+        public ParamClass(string name, params ParamEntry[] entries) : this(name, (IEnumerable<ParamEntry>) entries)
+        {
+        }
 
         public ParamClass(BinaryReaderEx input)
         {
             Name = input.ReadAsciiz();
-            var offset = input.ReadUInt32();
-            var oldPos = input.Position;
+            uint offset = input.ReadUInt32();
+            long oldPos = input.Position;
             input.Position = offset;
             ReadCore(input);
             input.Position = oldPos;
@@ -104,43 +118,47 @@ namespace BIS.Core.Config
             ReadCore(input);
         }
 
+        public string BaseClassName { get; private set; }
+        public List<ParamEntry> Entries { get; private set; }
+
         private void ReadCore(BinaryReaderEx input)
         {
             BaseClassName = input.ReadAsciiz();
 
-            var nEntries = input.ReadCompactInteger();
+            int nEntries = input.ReadCompactInteger();
             Entries = Enumerable.Range(0, nEntries).Select(_ => ReadParamEntry(input)).ToList();
         }
 
         public string ToString(int indentionLevel, bool onlyClassBody)
         {
-            var ind = new string(' ', indentionLevel * 4);
-            var classBody = new StringBuilder();
+            string ind = new string(' ', indentionLevel * 4);
+            StringBuilder classBody = new StringBuilder();
 
-            var indLvl = (onlyClassBody) ? indentionLevel : indentionLevel + 1;
-            foreach (var entry in Entries)
+            int indLvl = onlyClassBody ? indentionLevel : indentionLevel + 1;
+            foreach (ParamEntry entry in Entries)
                 classBody.AppendLine(entry.ToString(indLvl));
 
-            var classHead = (string.IsNullOrEmpty(BaseClassName)) ?
-                $"{ind}class {Name}" :
-                $"{ind}class {Name} : {BaseClassName}";
+            string classHead = string.IsNullOrEmpty(BaseClassName)
+                ? $"{ind}class {Name}"
+                : $"{ind}class {Name} : {BaseClassName}";
 
             if (onlyClassBody)
                 return classBody.ToString();
 
             return
-$@"{classHead}
+                $@"{classHead}
 {ind}{{
-{classBody.ToString()}{ind}}};";
+{classBody}{ind}}};";
         }
 
-        public override string ToString(int indentionLevel = 0) => ToString(indentionLevel, false);
+        public override string ToString(int indentionLevel = 0)
+        {
+            return ToString(indentionLevel, false);
+        }
     }
 
     public class ParamArray : ParamEntry
     {
-        public RawArray Array { get; private set; }
-
         public ParamArray(BinaryReaderEx input)
         {
             Name = input.ReadAsciiz();
@@ -153,33 +171,38 @@ $@"{classHead}
             Array = new RawArray(values);
         }
 
-        public ParamArray(string name, params RawValue[] values): this(name, (IEnumerable < RawValue >)values) { }
+        public ParamArray(string name, params RawValue[] values) : this(name, (IEnumerable<RawValue>) values)
+        {
+        }
+
+        public RawArray Array { get; }
 
         public override string ToString(int indentionLevel = 0)
         {
-            return $"{new string(' ', indentionLevel * 4)}{Name}[]={Array.ToString()};";
+            return $"{new string(' ', indentionLevel * 4)}{Name}[]={Array};";
         }
     }
 
     public class ParamValue : ParamEntry
     {
-        public RawValue Value { get; private set; }
-
         public ParamValue(string name, bool value)
         {
             Name = name;
             Value = new RawValue(value ? 1 : 0);
         }
+
         public ParamValue(string name, int value)
         {
             Name = name;
             Value = new RawValue(value);
         }
+
         public ParamValue(string name, float value)
         {
             Name = name;
             Value = new RawValue(value);
         }
+
         public ParamValue(string name, string value)
         {
             Name = name;
@@ -188,20 +211,24 @@ $@"{classHead}
 
         public ParamValue(BinaryReaderEx input)
         {
-            var subtype = (ValueType)input.ReadByte();
+            ValueType subtype = (ValueType) input.ReadByte();
             Name = input.ReadAsciiz();
             Value = new RawValue(input, subtype);
         }
 
-        public override string ToString(int indentionLevel=0)
+        public RawValue Value { get; }
+
+        public override string ToString(int indentionLevel = 0)
         {
-            return $"{new string(' ', indentionLevel * 4)}{Name}={Value.ToString()};";
+            return $"{new string(' ', indentionLevel * 4)}{Name}={Value};";
         }
     }
 
     public class ParamExternClass : ParamEntry
     {
-        public ParamExternClass(BinaryReaderEx input) : this(input.ReadAsciiz()) { }
+        public ParamExternClass(BinaryReaderEx input) : this(input.ReadAsciiz())
+        {
+        }
 
         public ParamExternClass(string name)
         {
@@ -213,9 +240,12 @@ $@"{classHead}
             return $"{new string(' ', indentionLevel * 4)}class {Name};";
         }
     }
+
     public class ParamDeleteClass : ParamEntry
     {
-        public ParamDeleteClass(BinaryReaderEx input) : this(input.ReadAsciiz()) { }
+        public ParamDeleteClass(BinaryReaderEx input) : this(input.ReadAsciiz())
+        {
+        }
 
         public ParamDeleteClass(string name)
         {
@@ -227,13 +257,13 @@ $@"{classHead}
             return $"{new string(' ', indentionLevel * 4)}delete {Name};";
         }
     }
+
     #endregion
 
     #region ParamValues
+
     public class RawArray
     {
-        public List<RawValue> Entries { get; private set; }
-
         public RawArray(IEnumerable<RawValue> values)
         {
             Entries = values.ToList();
@@ -241,22 +271,21 @@ $@"{classHead}
 
         public RawArray(BinaryReaderEx input)
         {
-            var nEntries = input.ReadCompactInteger();
+            int nEntries = input.ReadCompactInteger();
             Entries = Enumerable.Range(0, nEntries).Select(_ => new RawValue(input)).ToList();
         }
 
+        public List<RawValue> Entries { get; }
+
         public override string ToString()
         {
-            var valStr = string.Join(", ", Entries.Select(x => x.ToString()));
+            string valStr = string.Join(", ", Entries.Select(x => x.ToString()));
             return $"{{{valStr}}}";
         }
     }
 
     public class RawValue
     {
-        public ValueType Type { get; protected set; }
-        public object Value { get; private set; }
-
         public RawValue(string v)
         {
             Type = ValueType.Generic;
@@ -281,7 +310,9 @@ $@"{classHead}
             Value = v;
         }
 
-        public RawValue(BinaryReaderEx input) : this(input, (ValueType)input.ReadByte()) { }
+        public RawValue(BinaryReaderEx input) : this(input, (ValueType) input.ReadByte())
+        {
+        }
 
         public RawValue(BinaryReaderEx input, ValueType type)
         {
@@ -309,16 +340,20 @@ $@"{classHead}
             }
         }
 
+        public ValueType Type { get; protected set; }
+        public object Value { get; }
+
         public override string ToString()
         {
             if (Type == ValueType.Expression || Type == ValueType.Generic)
                 return $"\"{Value}\"";
 
             if (Type == ValueType.Float)
-                return ((float)Value).ToString(CultureInfo.InvariantCulture);
+                return ((float) Value).ToString(CultureInfo.InvariantCulture);
 
             return Value.ToString();
         }
     }
+
     #endregion
 }

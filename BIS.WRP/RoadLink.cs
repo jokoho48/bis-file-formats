@@ -1,8 +1,9 @@
-﻿using BIS.Core.Math;
+﻿#region
+
+using BIS.Core.Math;
 using BIS.Core.Streams;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
+#endregion
 
 namespace BIS.WRP
 {
@@ -24,13 +25,6 @@ namespace BIS.WRP
 
     public class RoadLink
     {
-        public short ConnectionCount { get; }
-        public Vector3P[] Positions { get; }
-        public byte[] ConnectionTypes { get; }
-        public int ObjectID { get; }
-        public string P3dPath { get; }
-        public Matrix4P ToWorld { get; }
-
         public RoadLink(BinaryReaderEx input)
         {
             ConnectionCount = input.ReadInt16();
@@ -53,5 +47,12 @@ namespace BIS.WRP
                 ToWorld = new Matrix4P(input);
             }
         }
+
+        public short ConnectionCount { get; }
+        public Vector3P[] Positions { get; }
+        public byte[] ConnectionTypes { get; }
+        public int ObjectID { get; }
+        public string P3dPath { get; }
+        public Matrix4P ToWorld { get; }
     }
 }

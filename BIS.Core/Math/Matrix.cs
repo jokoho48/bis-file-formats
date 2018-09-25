@@ -1,16 +1,19 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
 using System;
-using System.Runtime.InteropServices;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.Core.Math
 {
     /// <summary>
-    /// Layout:
-    /// [m00, m01, m02]
-    /// [m10, m11, m12]
-    /// [m20, m21, m22]
+    ///     Layout:
+    ///     [m00, m01, m02]
+    ///     [m10, m11, m12]
+    ///     [m20, m21, m22]
     /// </summary>
-    public unsafe struct Matrix3P
+    public struct Matrix3P
     {
         private Vector3P aside;
         private Vector3P up;
@@ -38,28 +41,35 @@ namespace BIS.Core.Math
 
         public float this[int row, int col]
         {
-            get
-            {
-                return this[col][row];
-            }
+            get => this[col][row];
 
             set
             {
                 switch (col)
                 {
-                    case 0: aside[row] = value; return;
-                    case 1: up[row] = value; return;
-                    case 2: dir[row] = value; return;
+                    case 0:
+                        aside[row] = value;
+                        return;
+                    case 1:
+                        up[row] = value;
+                        return;
+                    case 2:
+                        dir[row] = value;
+                        return;
 
                     default: throw new ArgumentOutOfRangeException();
                 }
             }
         }
 
-        public Matrix3P(float val) : this(new Vector3P(val), new Vector3P(val), new Vector3P(val)) { }
+        public Matrix3P(float val) : this(new Vector3P(val), new Vector3P(val), new Vector3P(val))
+        {
+        }
 
         public Matrix3P(BinaryReaderEx input)
-            : this(new Vector3P(input), new Vector3P(input), new Vector3P(input)) { }
+            : this(new Vector3P(input), new Vector3P(input), new Vector3P(input))
+        {
+        }
 
         private Matrix3P(Vector3P aside, Vector3P up, Vector3P dir)
         {
@@ -75,7 +85,7 @@ namespace BIS.Core.Math
 
         public static Matrix3P operator *(Matrix3P a, Matrix3P b)
         {
-            var res = new Matrix3P();
+            Matrix3P res = new Matrix3P();
 
             float x, y, z;
             x = b[0, 0];
@@ -88,9 +98,9 @@ namespace BIS.Core.Math
             x = b[0, 1];
             y = b[1, 1];
             z = b[2, 1];
-            res[0, 1] = a[0,0] * x + a[0, 1] * y + a[0, 2] * z;
-            res[1, 1] = a[1,0] * x + a[1, 1] * y + a[1, 2] * z;
-            res[2, 1] = a[2,0] * x + a[2, 1] * y + a[2, 2] * z;
+            res[0, 1] = a[0, 0] * x + a[0, 1] * y + a[0, 2] * z;
+            res[1, 1] = a[1, 0] * x + a[1, 1] * y + a[1, 2] * z;
+            res[2, 1] = a[2, 0] * x + a[2, 1] * y + a[2, 2] * z;
 
             x = b[0, 2];
             y = b[1, 2];
@@ -121,21 +131,20 @@ namespace BIS.Core.Math
 
         public override string ToString()
         {
-            return 
-$@"{this[0,0]}, {this[0, 1]}, {this[0, 2]},
+            return
+                $@"{this[0, 0]}, {this[0, 1]}, {this[0, 2]},
 {this[1, 0]}, {this[1, 1]}, {this[1, 2]},
 {this[2, 0]}, {this[2, 1]}, {this[2, 2]}";
         }
     }
 
     /// <summary>
-    /// Layout:
-    /// [m00, m01, m02, m03]
-    /// [m10, m11, m12, m13]
-    /// [m20, m21, m22, m23]
-    /// [ 0 , 0  , 0  , 1  ]
+    ///     Layout:
+    ///     [m00, m01, m02, m03]
+    ///     [m10, m11, m12, m13]
+    ///     [m20, m21, m22, m23]
+    ///     [ 0 , 0  , 0  , 1  ]
     /// </summary>
-
     public struct Matrix4P
     {
         private Matrix3P orientation;
@@ -146,10 +155,7 @@ $@"{this[0,0]}, {this[0, 1]}, {this[0, 2]},
 
         public float this[int row, int col]
         {
-            get
-            {
-                return (col == 3) ? position[row] : orientation[col][row];
-            }
+            get => col == 3 ? position[row] : orientation[col][row];
 
             set
             {
@@ -160,9 +166,13 @@ $@"{this[0,0]}, {this[0, 1]}, {this[0, 2]},
             }
         }
 
-        public Matrix4P(float val) : this(new Matrix3P(val), new Vector3P(val)) { }
+        public Matrix4P(float val) : this(new Matrix3P(val), new Vector3P(val))
+        {
+        }
 
-        public Matrix4P(BinaryReaderEx input) : this(new Matrix3P(input), new Vector3P(input)) { }
+        public Matrix4P(BinaryReaderEx input) : this(new Matrix3P(input), new Vector3P(input))
+        {
+        }
 
         private Matrix4P(Matrix3P orientation, Vector3P position)
         {
@@ -172,7 +182,7 @@ $@"{this[0,0]}, {this[0, 1]}, {this[0, 2]},
 
         public static Matrix4P operator *(Matrix4P a, Matrix4P b)
         {
-            var res = new Matrix4P();
+            Matrix4P res = new Matrix4P();
 
             float x, y, z;
             x = b[0, 0];
@@ -208,10 +218,10 @@ $@"{this[0,0]}, {this[0, 1]}, {this[0, 2]},
 
         public static Matrix4P ReadMatrix4Quat16b(BinaryReaderEx input)
         {
-            var quat = Quaternion.ReadCompressed(input);
-            var x = new ShortFloat(input.ReadUInt16());
-            var y = new ShortFloat(input.ReadUInt16());
-            var z = new ShortFloat(input.ReadUInt16());
+            Quaternion quat = Quaternion.ReadCompressed(input);
+            ShortFloat x = new ShortFloat(input.ReadUInt16());
+            ShortFloat y = new ShortFloat(input.ReadUInt16());
+            ShortFloat z = new ShortFloat(input.ReadUInt16());
 
             return new Matrix4P(quat.AsRotationMatrix(), new Vector3P(x, y, z));
         }
@@ -225,7 +235,7 @@ $@"{this[0,0]}, {this[0, 1]}, {this[0, 2]},
         public override string ToString()
         {
             return
-$@"{this[0, 0]}, {this[0, 1]}, {this[0, 2]}, {this[0, 3]},
+                $@"{this[0, 0]}, {this[0, 1]}, {this[0, 2]}, {this[0, 3]},
 {this[1, 0]}, {this[1, 1]}, {this[1, 2]}, {this[1, 3]},
 {this[2, 0]}, {this[2, 1]}, {this[2, 2]}, {this[2, 3]},
 {this[3, 0]}, {this[3, 1]}, {this[3, 2]}, 1";

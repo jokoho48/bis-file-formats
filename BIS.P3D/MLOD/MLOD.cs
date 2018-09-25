@@ -1,15 +1,18 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
 using System;
 using System.IO;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.P3D.MLOD
 {
     public class MLOD
     {
-        public int Version { get; private set; }
-        public P3DM_LOD[] Lods { get; private set; }
-
-        public MLOD(string fileName) : this(File.OpenRead(fileName)) {}
+        public MLOD(string fileName) : this(File.OpenRead(fileName))
+        {
+        }
 
         public MLOD(Stream stream)
         {
@@ -21,6 +24,9 @@ namespace BIS.P3D.MLOD
             Version = 257;
             Lods = lods;
         }
+
+        public int Version { get; private set; }
+        public P3DM_LOD[] Lods { get; private set; }
 
         private void Read(BinaryReaderEx input)
         {
@@ -43,12 +49,12 @@ namespace BIS.P3D.MLOD
                 Lods[index].Write(output);
         }
 
-        public void WriteToFile(string file, bool allowOverwriting=false)
+        public void WriteToFile(string file, bool allowOverwriting = false)
         {
-            var mode = (allowOverwriting) ? FileMode.Create : FileMode.CreateNew;
+            FileMode mode = allowOverwriting ? FileMode.Create : FileMode.CreateNew;
 
-            var fs = new FileStream(file, mode);
-            using (var output = new BinaryWriterEx(fs))
+            FileStream fs = new FileStream(file, mode);
+            using (BinaryWriterEx output = new BinaryWriterEx(fs))
             {
                 Write(output);
             }
@@ -56,8 +62,8 @@ namespace BIS.P3D.MLOD
 
         public MemoryStream WriteToMemory()
         {
-            var memStream = new MemoryStream(100000);
-            var outStream = new BinaryWriterEx(memStream);
+            MemoryStream memStream = new MemoryStream(100000);
+            BinaryWriterEx outStream = new BinaryWriterEx(memStream);
             Write(outStream);
             outStream.Position = 0;
             return memStream;
@@ -65,7 +71,7 @@ namespace BIS.P3D.MLOD
 
         public void WriteToStream(Stream stream)
         {
-            var output = new BinaryWriterEx(stream);
+            BinaryWriterEx output = new BinaryWriterEx(stream);
             Write(output);
         }
     }

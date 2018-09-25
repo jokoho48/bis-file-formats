@@ -1,5 +1,9 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
 using System;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.PAA
 {
@@ -8,14 +12,7 @@ namespace BIS.PAA
         private const ushort MAGIC_LZW_W = 1234;
         private const ushort MAGIC_LZW_H = 8765;
 
-        private bool hasMagicLZW;
-
-        public int Offset { get; }
-        public int DataOffset { get; }
-        public bool IsLZOCompressed { get; }
-        public ushort Width { get; }
-        public ushort Height { get; }
-        public uint DataSize { get; }
+        private readonly bool hasMagicLZW;
 
         public Mipmap(BinaryReaderEx input, int offset)
         {
@@ -40,16 +37,23 @@ namespace BIS.PAA
             }
 
             DataSize = input.ReadUInt24();
-            DataOffset = (int)input.Position;
+            DataOffset = (int) input.Position;
             input.Position += DataSize; //skip data
         }
+
+        public int Offset { get; }
+        public int DataOffset { get; }
+        public bool IsLZOCompressed { get; }
+        public ushort Width { get; }
+        public ushort Height { get; }
+        public uint DataSize { get; }
 
         public byte[] GetRawPixelData(BinaryReaderEx input, PAAType type)
         {
             input.Position = DataOffset;
 
-            uint expectedSize = (uint)(Width * Height);
-            var data = new byte[expectedSize];
+            uint expectedSize = (uint) (Width * Height);
+            byte[] data = new byte[expectedSize];
             switch (type)
             {
                 case PAAType.AI88:
@@ -59,9 +63,9 @@ namespace BIS.PAA
                     return input.ReadLZSS(expectedSize, true);
 
                 case PAAType.P8:
-                    return !hasMagicLZW ?
-                        input.ReadCompressedIndices((int)DataSize, expectedSize) :
-                        input.ReadLZSS(expectedSize, true);
+                    return !hasMagicLZW
+                        ? input.ReadCompressedIndices((int) DataSize, expectedSize)
+                        : input.ReadLZSS(expectedSize, true);
 
                 case PAAType.RGBA_8888:
                     expectedSize *= 4;
@@ -74,9 +78,7 @@ namespace BIS.PAA
                 case PAAType.DXT3:
                 case PAAType.DXT4:
                 case PAAType.DXT5:
-                    return !IsLZOCompressed ?
-                        input.ReadBytes((int)DataSize) :
-                        input.ReadLZO(expectedSize);
+                    return !IsLZOCompressed ? input.ReadBytes((int) DataSize) : input.ReadLZO(expectedSize);
 
                 default: throw new ArgumentException("Unexpected PAA type", nameof(type));
             }

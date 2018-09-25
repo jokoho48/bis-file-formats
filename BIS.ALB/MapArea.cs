@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region
+
 using System.IO;
-using System.Text;
+
+#endregion
 
 namespace BIS.ALB
 {
     public class MapArea
     {
         public double X1;
-        public double Y1;
         public double X2;
+        public double Y1;
         public double Y2;
-
-        public double Width => X2 - X1;
-        public double Height => Y2 - Y1;
 
         public MapArea(BinaryReader input, bool readDouble = true)
         {
@@ -32,6 +30,9 @@ namespace BIS.ALB
                 Y2 = input.ReadSingle();
             }
         }
+
+        public double Width => X2 - X1;
+        public double Height => Y2 - Y1;
 
         public override string ToString()
         {

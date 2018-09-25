@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace BIS.PAA
 {
-    internal enum TexSwizzle: byte
+    internal enum TexSwizzle : byte
     {
         TSAlpha,
         TSRed,
@@ -29,7 +30,7 @@ namespace BIS.PAA
         {
             get
             {
-                switch(ch)
+                switch (ch)
                 {
                     case 0: return SwizA;
                     case 1: return SwizR;
@@ -43,10 +44,18 @@ namespace BIS.PAA
             {
                 switch (ch)
                 {
-                    case 0: SwizA = value; break;
-                    case 1: SwizR = value; break;
-                    case 2: SwizG = value; break;
-                    case 3: SwizB = value; break;
+                    case 0:
+                        SwizA = value;
+                        break;
+                    case 1:
+                        SwizR = value;
+                        break;
+                    case 2:
+                        SwizG = value;
+                        break;
+                    case 3:
+                        SwizB = value;
+                        break;
                     default: throw new ArgumentOutOfRangeException();
                 }
             }
@@ -85,7 +94,7 @@ namespace BIS.PAA
             }
             else if (swizzle[ch] <= TexSwizzle.TSBlue)
             {
-                invSwizzle[(int)swizzle[ch]] = swiz;
+                invSwizzle[(int) swizzle[ch]] = swiz;
             }
         }
 
@@ -96,16 +105,34 @@ namespace BIS.PAA
                 // one - ignore input (mul by 0) and set it to one (add 255)
                 return (0, 0, 255);
             }
+
             int mul = 1;
             int add = 0;
             switch (swiz)
             {
-                case TexSwizzle.TSInvAlpha: swiz = TexSwizzle.TSAlpha; mul = -1; add = 255; break;
-                case TexSwizzle.TSInvRed: swiz = TexSwizzle.TSRed; mul = -1; add = 255; break;
-                case TexSwizzle.TSInvGreen: swiz = TexSwizzle.TSGreen; mul = -1; add = 255; break;
-                case TexSwizzle.TSInvBlue: swiz = TexSwizzle.TSBlue; mul = -1; add = 255; break;
+                case TexSwizzle.TSInvAlpha:
+                    swiz = TexSwizzle.TSAlpha;
+                    mul = -1;
+                    add = 255;
+                    break;
+                case TexSwizzle.TSInvRed:
+                    swiz = TexSwizzle.TSRed;
+                    mul = -1;
+                    add = 255;
+                    break;
+                case TexSwizzle.TSInvGreen:
+                    swiz = TexSwizzle.TSGreen;
+                    mul = -1;
+                    add = 255;
+                    break;
+                case TexSwizzle.TSInvBlue:
+                    swiz = TexSwizzle.TSBlue;
+                    mul = -1;
+                    add = 255;
+                    break;
             }
-            int offset = swiz < TexSwizzle.TSOne ? 24 - (int)swiz * 8 : 0;
+
+            int offset = swiz < TexSwizzle.TSOne ? 24 - (int) swiz * 8 : 0;
 
             return (offset, mul, add);
         }
@@ -113,7 +140,7 @@ namespace BIS.PAA
         private static void ChannelSwizzle(in ARGBSwizzle channelSwizzle, byte[] argbPixels)
         {
             if (channelSwizzle[0] == TexSwizzle.TSAlpha && channelSwizzle[1] == TexSwizzle.TSRed &&
-              channelSwizzle[2] == TexSwizzle.TSGreen && channelSwizzle[3] == TexSwizzle.TSBlue)
+                channelSwizzle[2] == TexSwizzle.TSGreen && channelSwizzle[3] == TexSwizzle.TSBlue)
             {
                 return;
             }
@@ -133,10 +160,10 @@ namespace BIS.PAA
                 int g = (p >> gOffset) & 0xff;
                 int b = (p >> bOffset) & 0xff;
 
-                argbPixels[pixOffset] = (byte)(b * mulB + addB);
-                argbPixels[pixOffset + 1] = (byte)(g * mulG + addG);
-                argbPixels[pixOffset + 2] = (byte)(r * mulR + addR);
-                argbPixels[pixOffset + 3] = (byte)(a * mulA + addA);
+                argbPixels[pixOffset] = (byte) (b * mulB + addB);
+                argbPixels[pixOffset + 1] = (byte) (g * mulG + addG);
+                argbPixels[pixOffset + 2] = (byte) (r * mulR + addR);
+                argbPixels[pixOffset + 3] = (byte) (a * mulA + addA);
             }
         }
     }
