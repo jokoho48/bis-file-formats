@@ -255,10 +255,10 @@ namespace BIS.ALB
 
         public class ALB_Object : ALB_Value
         {
-            public int classID;
             private readonly LinkedList<ALB_Entry> entries = new LinkedList<ALB_Entry>();
-            private int objectID;
             private readonly int size;
+            public int classID;
+            private int objectID;
 
             public ALB_Object(BinaryReaderEx input)
             {

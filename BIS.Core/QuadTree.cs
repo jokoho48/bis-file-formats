@@ -30,13 +30,13 @@ namespace BIS.Core
         /// </summary>
         private readonly bool flag;
 
-        private int logSizeTotalX;
-        private int logSizeTotalY;
-
         /// <summary>
         ///     root of the quadTree that represents the whole area
         /// </summary>
         private readonly IQuadTreeNode root;
+
+        private int logSizeTotalX;
+        private int logSizeTotalY;
 
         /// <summary>
         ///     how many virtual elements exist in X-dimension
@@ -176,12 +176,12 @@ namespace BIS.Core
             private const int logSizeX = 2;
             private const int logSizeY = 2;
 
+            private readonly IQuadTreeNode[] subTrees = new IQuadTreeNode[16];
+
             /// <summary>
             ///     bits determine if subTree is a leaf or not
             /// </summary>
             private short flag;
-
-            private readonly IQuadTreeNode[] subTrees = new IQuadTreeNode[16];
 
             public QuadTreeNode(BinaryReader input)
             {
