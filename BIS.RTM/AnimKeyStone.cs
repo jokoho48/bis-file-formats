@@ -6,21 +6,6 @@ using BIS.Core.Streams;
 
 namespace BIS.RTM
 {
-    public enum AnimKeystoneTypeID
-    {
-        AKSStepSound,
-        NAnimKeystoneTypeID,
-        AKSUninitialized = -1
-    }
-
-    public enum AnimMetaDataID
-    {
-        AMDWalkCycles,
-        AMDAnimLength,
-        NAnimMetaDataID,
-        AMDUninitialized = -1
-    }
-
     public class AnimKeyStone
     {
         public AnimKeyStone(BinaryReaderEx input)

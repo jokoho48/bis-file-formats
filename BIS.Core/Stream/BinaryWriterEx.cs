@@ -8,7 +8,7 @@ namespace BIS.Core.Streams
 {
     public class BinaryWriterEx : BinaryWriter
     {
-        public BinaryWriterEx(Stream dstStream) : base(dstStream)
+        public BinaryWriterEx(System.IO.Stream dstStream) : base(dstStream)
         {
         }
 

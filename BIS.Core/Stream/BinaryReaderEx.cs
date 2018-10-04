@@ -11,7 +11,7 @@ namespace BIS.Core.Streams
 {
     public class BinaryReaderEx : BinaryReader
     {
-        public BinaryReaderEx(Stream stream) : base(stream)
+        public BinaryReaderEx(System.IO.Stream stream) : base(stream)
         {
             UseCompressionFlag = false;
         }
