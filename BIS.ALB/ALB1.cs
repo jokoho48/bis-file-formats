@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using BIS.Core.Streams;
@@ -57,7 +58,7 @@ namespace BIS.ALB
             {
                 ALB_Entry e = new ALB_Entry(input, layerVersion);
                 if (tags[e.TagID].Equals("mlayerversion", StringComparison.OrdinalIgnoreCase))
-                    layerVersion = (e.Value as ALB_SimpleValue<int>).Value;
+                    layerVersion = (e.Value as ALB_SimpleValue<int>)?.Value;
 
                 entries.AddLast(e);
             }
@@ -87,19 +88,14 @@ namespace BIS.ALB
         {
             ALB_Entry treeEntry = entries.FirstOrDefault(e => tags[e.TagID].Equals("tree"));
             StringBuilder sb = new StringBuilder();
-            if (treeEntry != null)
-            {
-                ALB_List listValue = treeEntry.Value as ALB_List;
-                if (listValue.treeRoot != null)
-                {
-                    LinkedList<ObjectTreeLeaf> objData = new LinkedList<ObjectTreeLeaf>();
-                    ExtractObjectData(listValue.treeRoot, objData);
+            ALB_List listValue = treeEntry?.Value as ALB_List;
+            if (listValue?.treeRoot == null) return sb.ToString();
+            LinkedList<ObjectTreeLeaf> objData = new LinkedList<ObjectTreeLeaf>();
+            ExtractObjectData(listValue.treeRoot, objData);
 
-                    foreach (ObjectTreeLeaf objNode in objData)
-                    {
-                        sb.AppendLine(objNode.ToString());
-                    }
-                }
+            foreach (ObjectTreeLeaf objNode in objData)
+            {
+                sb.AppendLine(objNode.ToString());
             }
 
             return sb.ToString();
@@ -284,7 +280,7 @@ namespace BIS.ALB
         {
             private readonly byte[] data;
 
-            public ALB_Unknown2(BinaryReaderEx input)
+            public ALB_Unknown2(BinaryReader input)
             {
                 data = input.ReadBytes(21);
             }
@@ -299,7 +295,7 @@ namespace BIS.ALB
         {
             private readonly double[] values;
 
-            public ALB_DoubleArray(BinaryReaderEx input)
+            public ALB_DoubleArray(BinaryReader input)
             {
                 byte n = input.ReadByte();
                 values = Enumerable.Range(0, n).Select(_ => input.ReadDouble()).ToArray();

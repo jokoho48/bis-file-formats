@@ -69,11 +69,7 @@ namespace BIS.Core.Config
                 ? $"{ind}class {Name}"
                 : $"{ind}class {Name} : {BaseClassName}";
 
-            if (onlyClassBody)
-                return classBody.ToString();
-
-            return
-                $@"{classHead}
+            return onlyClassBody ? classBody.ToString() : $@"{classHead}
 {ind}{{
 {classBody}{ind}}};";
         }

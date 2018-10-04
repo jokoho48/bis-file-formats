@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Globalization;
+using System.IO;
 using BIS.Core.Streams;
 
 #endregion
@@ -22,7 +23,7 @@ namespace BIS.Core
             Alpha = a;
         }
 
-        public ColorP(BinaryReaderEx input)
+        public ColorP(BinaryReader input)
         {
             Red = input.ReadSingle();
             Green = input.ReadSingle();

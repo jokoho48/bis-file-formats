@@ -65,13 +65,11 @@ namespace BIS.P3D
 
         public static bool IsODOL(Stream stream)
         {
-            bool result = false;
-            if (stream.ReadByte() == 'O'
-                && stream.ReadByte() == 'D'
-                && stream.ReadByte() == 'O'
-                && stream.ReadByte() == 'L')
-                result = true;
-            ;
+            bool result = stream.ReadByte() == 'O'
+                          && stream.ReadByte() == 'D'
+                          && stream.ReadByte() == 'O'
+                          && stream.ReadByte() == 'L';
+
 
             stream.Position = 0;
 
@@ -85,13 +83,11 @@ namespace BIS.P3D
 
         public static bool IsMLOD(Stream stream)
         {
-            bool result = false;
-            if (stream.ReadByte() == 'M'
-                && stream.ReadByte() == 'L'
-                && stream.ReadByte() == 'O'
-                && stream.ReadByte() == 'D')
-                result = true;
-            ;
+            bool result = stream.ReadByte() == 'M'
+                          && stream.ReadByte() == 'L'
+                          && stream.ReadByte() == 'O'
+                          && stream.ReadByte() == 'D';
+
 
             stream.Position = 0;
 

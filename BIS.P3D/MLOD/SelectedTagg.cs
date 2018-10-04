@@ -25,10 +25,11 @@ namespace BIS.P3D.MLOD
         public override void Write(BinaryWriterEx output)
         {
             WriteHeader(output);
-            for (int index = 0; index < WeightedPoints.Length; ++index)
-                output.Write(WeightedPoints[index]);
-            for (int index = 0; index < Faces.Length; ++index)
-                output.Write(Faces[index]);
+            foreach (byte point in WeightedPoints)
+                output.Write(point);
+
+            foreach (byte face in Faces)
+                output.Write(face);
         }
     }
 }

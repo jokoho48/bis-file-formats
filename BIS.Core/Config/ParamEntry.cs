@@ -7,10 +7,6 @@ using BIS.Core.Streams;
 
 namespace BIS.Core.Config
 {
-    #region Enums
-
-    #endregion
-
     #region ParamEntries
 
     public abstract class ParamEntry
@@ -44,6 +40,7 @@ namespace BIS.Core.Config
 
         public virtual string ToString(int indentionLevel = 0)
         {
+
             return base.ToString();
         }
 
@@ -52,10 +49,6 @@ namespace BIS.Core.Config
             return ToString(0);
         }
     }
-
-    #endregion
-
-    #region ParamValues
 
     #endregion
 }

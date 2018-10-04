@@ -34,14 +34,7 @@ namespace BIS.Core
 
         public int ElementCount { get; }
 
-        public T this[int i]
-        {
-            get
-            {
-                if (IsCondensed) return DefaultValue;
-                return array[i];
-            }
-        }
+        public T this[int i] => IsCondensed ? DefaultValue : array[i];
 
         public IEnumerator<T> GetEnumerator()
         {

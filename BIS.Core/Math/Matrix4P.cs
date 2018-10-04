@@ -48,10 +48,9 @@ namespace BIS.Core.Math
         {
             Matrix4P res = new Matrix4P();
 
-            float x, y, z;
-            x = b[0, 0];
-            y = b[1, 0];
-            z = b[2, 0];
+            float x = b[0, 0];
+            float y = b[1, 0];
+            float z = b[2, 0];
             res[0, 0] = a[0, 0] * x + a[0, 1] * y + a[0, 2] * z;
             res[1, 0] = a[1, 0] * x + a[1, 1] * y + a[1, 2] * z;
             res[2, 0] = a[2, 0] * x + a[2, 1] * y + a[2, 2] * z;

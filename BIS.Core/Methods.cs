@@ -20,8 +20,7 @@ namespace BIS.Core
         public static bool EqualsFloat(float f1, float f2, float tolerance = 0.0001f)
         {
             float dif = Abs(f1 - f2);
-            if (dif <= tolerance) return true;
-            return false;
+            return dif <= tolerance;
         }
 
         public static IEnumerable<T> Yield<T>(this T src)

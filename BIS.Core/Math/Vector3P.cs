@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+using System.IO;
 using BIS.Core.Streams;
 
 #endregion
@@ -20,7 +21,7 @@ namespace BIS.Core.Math
         {
         }
 
-        public Vector3P(BinaryReaderEx input) : this(input.ReadSingle(), input.ReadSingle(), input.ReadSingle())
+        public Vector3P(BinaryReader input) : this(input.ReadSingle(), input.ReadSingle(), input.ReadSingle())
         {
         }
 

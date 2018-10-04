@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.IO;
 using BIS.Core.Math;
 using BIS.Core.Streams;
 
@@ -17,7 +18,7 @@ namespace BIS.P3D.MLOD
             PointFlags = flags;
         }
 
-        public Point(BinaryReaderEx input)
+        public Point(BinaryReader input)
         {
             Position = new Vector3P(input);
             PointFlags = (PointFlags) input.ReadInt32();

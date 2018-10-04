@@ -45,8 +45,8 @@ namespace BIS.P3D.MLOD
             output.WriteAscii("MLOD", 4);
             output.Write(Version);
             output.Write(Lods.Length);
-            for (int index = 0; index < Lods.Length; ++index)
-                Lods[index].Write(output);
+            foreach (P3DM_LOD mLod in Lods)
+                mLod.Write(output);
         }
 
         public void WriteToFile(string file, bool allowOverwriting = false)

@@ -1,4 +1,5 @@
-﻿using BIS.Core.Streams;
+﻿using System.IO;
+using BIS.Core.Streams;
 
 namespace BIS.Core.Math
 {
@@ -66,7 +67,7 @@ namespace BIS.Core.Math
             xyz = value;
         }
 
-        public Vector3PCompressed(BinaryReaderEx input)
+        public Vector3PCompressed(BinaryReader input)
         {
             xyz = input.ReadInt32();
         }

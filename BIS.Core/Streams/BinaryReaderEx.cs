@@ -59,11 +59,9 @@ namespace BIS.Core.Streams
         public int ReadCompactInteger()
         {
             int val = ReadByte();
-            if ((val & 0x80) != 0)
-            {
-                int extra = ReadByte();
-                val += (extra - 1) * 0x80;
-            }
+            if ((val & 0x80) == 0) return val;
+            int extra = ReadByte();
+            val += (extra - 1) * 0x80;
 
             return val;
         }
@@ -75,9 +73,7 @@ namespace BIS.Core.Streams
                 return new byte[0];
             }
 
-            if (UseLZOCompression) return ReadLZO(expectedSize);
-
-            return ReadLZSS(expectedSize);
+            return UseLZOCompression ? ReadLZO(expectedSize) : ReadLZSS(expectedSize);
         }
 
         public byte[] ReadLZO(uint expectedSize)
@@ -103,8 +99,7 @@ namespace BIS.Core.Streams
                 return ReadBytes((int) expectedSize);
             }
 
-            byte[] dst = new byte[expectedSize];
-            LZSS.ReadLZSS(BaseStream, out dst, expectedSize, inPAA); //PAAs calculate checksums with signed byte values
+            LZSS.ReadLZSS(BaseStream, out byte[] dst, expectedSize, inPAA); //PAAs calculate checksums with signed byte values
             return dst;
         }
 

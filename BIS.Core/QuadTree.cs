@@ -106,9 +106,7 @@ namespace BIS.Core
                 (uint) (x << (8 * sizeof(int) - logSizeTotalX)); // make highest bits accessible on left side
             uint shiftedY =
                 (uint) (y << (8 * sizeof(int) - logSizeTotalY)); // make highest bits accessible on left side
-            if (flag)
-                return ((QuadTreeNode) root).Get(x, y, shiftedX, shiftedY);
-            return ((QuadTreeLeaf) root).Get(x, y);
+            return flag ? ((QuadTreeNode) root).Get(x, y, shiftedX, shiftedY) : ((QuadTreeLeaf) root).Get(x, y);
         }
 
         private void CalculateDimensions(int x, int y)

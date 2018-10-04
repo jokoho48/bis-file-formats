@@ -25,10 +25,11 @@ namespace BIS.P3D.MLOD
         public override void Write(BinaryWriterEx output)
         {
             WriteHeader(output);
-            for (int index = 0; index < LockedPoints.Length; ++index)
-                output.Write(LockedPoints[index]);
-            for (int index = 0; index < LockedFaces.Length; ++index)
-                output.Write(LockedFaces[index]);
+            foreach (bool point in LockedPoints)
+                output.Write(point);
+
+            foreach (bool face in LockedFaces)
+                output.Write(face);
         }
     }
 }

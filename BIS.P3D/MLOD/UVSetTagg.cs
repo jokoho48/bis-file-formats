@@ -37,12 +37,12 @@ namespace BIS.P3D.MLOD
         {
             WriteHeader(output);
             output.Write(UvSetNr);
-            for (int i = 0; i < FaceUVs.Length; ++i)
+            foreach (float[,] faceUV in FaceUVs)
             {
-                for (int j = 0; j < FaceUVs[i].Length / 2; ++j)
+                for (int j = 0; j < faceUV.Length / 2; ++j)
                 {
-                    output.Write(FaceUVs[i][j, 0]);
-                    output.Write(FaceUVs[i][j, 1]);
+                    output.Write(faceUV[j, 0]);
+                    output.Write(faceUV[j, 1]);
                 }
             }
         }

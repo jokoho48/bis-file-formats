@@ -65,13 +65,16 @@ namespace BIS.Core.Config
 
         public override string ToString()
         {
-            if (Type == ValueType.Expression || Type == ValueType.Generic)
-                return $"\"{Value}\"";
-
-            if (Type == ValueType.Float)
-                return ((float) Value).ToString(CultureInfo.InvariantCulture);
-
-            return Value.ToString();
+            switch (Type)
+            {
+                case ValueType.Expression:
+                case ValueType.Generic:
+                    return $"\"{Value}\"";
+                case ValueType.Float:
+                    return ((float) Value).ToString(CultureInfo.InvariantCulture);
+                default:
+                    return Value.ToString();
+            }
         }
     }
 }
