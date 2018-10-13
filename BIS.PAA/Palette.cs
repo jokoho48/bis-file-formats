@@ -1,8 +1,8 @@
 ﻿#region
 
-using System.Diagnostics;
 using BIS.Core;
 using BIS.Core.Streams;
+using System.Diagnostics;
 
 #endregion
 
@@ -12,7 +12,6 @@ namespace BIS.PAA
     {
         public const int PicFlagAlpha = 1;
         public const int PicFlagTransparent = 2;
-
 
         public Palette(PAAType format)
         {
@@ -24,6 +23,7 @@ namespace BIS.PAA
                 case PAAType.AI88:
                     AverageColor = new PackedColor(0x80c02020);
                     break;
+
                 default:
                     AverageColor = new PackedColor(0xff802020);
                     break;
@@ -56,10 +56,12 @@ namespace BIS.PAA
                         Debug.Assert(taggSize == 4);
                         MaxColor = new PackedColor(input.ReadUInt32());
                         break;
+
                     case "CGVA": //AVGC
                         Debug.Assert(taggSize == 4);
                         AverageColor = new PackedColor(input.ReadUInt32());
                         break;
+
                     case "GALF": //FLAG
                         Debug.Assert(taggSize == 4);
 
@@ -78,13 +80,14 @@ namespace BIS.PAA
                         }
 
                         break;
+
                     case "ZIWS": //SWIZ
                         Debug.Assert(taggSize == 4);
                         ARGBSwizzle newSwizzle;
-                        newSwizzle.SwizA = (TexSwizzle) input.ReadByte();
-                        newSwizzle.SwizR = (TexSwizzle) input.ReadByte();
-                        newSwizzle.SwizG = (TexSwizzle) input.ReadByte();
-                        newSwizzle.SwizB = (TexSwizzle) input.ReadByte();
+                        newSwizzle.SwizA = (TexSwizzle)input.ReadByte();
+                        newSwizzle.SwizR = (TexSwizzle)input.ReadByte();
+                        newSwizzle.SwizG = (TexSwizzle)input.ReadByte();
+                        newSwizzle.SwizB = (TexSwizzle)input.ReadByte();
                         ChannelSwizzle = newSwizzle;
                         break;
 

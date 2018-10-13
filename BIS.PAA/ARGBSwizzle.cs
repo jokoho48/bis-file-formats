@@ -30,20 +30,23 @@ namespace BIS.PAA
                     case 0:
                         SwizA = value;
                         break;
+
                     case 1:
                         SwizR = value;
                         break;
+
                     case 2:
                         SwizG = value;
                         break;
+
                     case 3:
                         SwizB = value;
                         break;
+
                     default: throw new ArgumentOutOfRangeException();
                 }
             }
         }
-
 
         static ARGBSwizzle()
         {

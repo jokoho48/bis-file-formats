@@ -1,5 +1,5 @@
-﻿using System.Text;
-using BIS.Core.Streams;
+﻿using BIS.Core.Streams;
+using System.Text;
 
 namespace BIS.ALB
 {
@@ -31,6 +31,7 @@ namespace BIS.ALB
 
         //it's currently not clear what object hash is stored here; maybe the one covering the most area
         public int HashValue { get; }
+
         public int ObjectTypeCount { get; }
         public int[] ObjectTypeHashes { get; }
         public ObjectInfo[][] ObjectInfos { get; }

@@ -1,7 +1,7 @@
 ﻿#region
 
-using System;
 using BIS.Core.Streams;
+using System;
 
 #endregion
 
@@ -50,9 +50,11 @@ namespace BIS.Core.Math
                     case 0:
                         aside[row] = value;
                         return;
+
                     case 1:
                         up[row] = value;
                         return;
+
                     case 2:
                         dir[row] = value;
                         return;

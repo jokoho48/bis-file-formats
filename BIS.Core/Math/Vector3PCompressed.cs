@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using BIS.Core.Streams;
 
 namespace BIS.Core.Math
 {
@@ -8,7 +7,6 @@ namespace BIS.Core.Math
         private const float ScaleFactor = -1.0f / 511.0f;
 
         private readonly int xyz;
-
 
         //public float X
         //{

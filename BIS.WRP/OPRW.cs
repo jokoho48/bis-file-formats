@@ -1,11 +1,11 @@
 ﻿#region
 
-using System;
-using System.Diagnostics;
-using System.IO;
 using BIS.Core;
 using BIS.Core.Math;
 using BIS.Core.Streams;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 #endregion
 
@@ -22,7 +22,7 @@ namespace BIS.WRP
             // version 5 - OFP XBox landscape beta (streaming, no map)
             // version 6 - landscape (streaming and map)
             // version 7 - landscape, including roads (streaming and map)
-            // version 10 - landscape, quad trees 
+            // version 10 - landscape, quad trees
             // version 11 - landscape, changed geography
             // version 12 - OFP Xbox/FP2 landscape, different grid for textures and terrain
             // version 13 - landscape, subdivision hints included
@@ -106,15 +106,15 @@ namespace BIS.WRP
                 2);
 
             if (Version < 21)
-                Random = input.ReadCompressed((uint) (LandRangeX * LandRangeY * 2)); //short values
+                Random = input.ReadCompressed((uint)(LandRangeX * LandRangeY * 2)); //short values
 
             if (Version >= 18)
-                GrassApprox = input.ReadCompressed((uint) (TerrainRangeX * TerrainRangeY)); //byte values
+                GrassApprox = input.ReadCompressed((uint)(TerrainRangeX * TerrainRangeY)); //byte values
 
             if (Version >= 22)
-                PrimTexIndex = input.ReadCompressed((uint) (TerrainRangeX * TerrainRangeY)); //signed byte values?
+                PrimTexIndex = input.ReadCompressed((uint)(TerrainRangeX * TerrainRangeY)); //signed byte values?
 
-            Elevation = input.ReadCompressed((uint) (TerrainRangeX * TerrainRangeY * 4));
+            Elevation = input.ReadCompressed((uint)(TerrainRangeX * TerrainRangeY * 4));
 
             int nMaterials = input.ReadInt32();
             MatNames = new string[nMaterials];
@@ -139,8 +139,8 @@ namespace BIS.WRP
                 (src, off) => BitConverter.ToInt32(src, off), 4);
             int sizeOfMapinfo = input.ReadInt32();
 
-            Persistent = input.ReadCompressed((uint) (LandRangeX * LandRangeY));
-            byte[] subDivHints = input.ReadCompressed((uint) (TerrainRangeX * TerrainRangeY));
+            Persistent = input.ReadCompressed((uint)(LandRangeX * LandRangeY));
+            byte[] subDivHints = input.ReadCompressed((uint)(TerrainRangeX * TerrainRangeY));
 
             MaxObjectId = input.ReadInt32();
             int roadnetSize = input.ReadInt32();

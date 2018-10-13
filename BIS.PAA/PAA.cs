@@ -1,10 +1,10 @@
 ﻿#region
 
+using BIS.Core.Streams;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using BIS.Core.Streams;
 
 #endregion
 
@@ -14,7 +14,6 @@ namespace BIS.PAA
     {
         private readonly int[] mipmapOffsets = new int[16];
         private List<Mipmap> mipmaps;
-
 
         public PAA(string file) : this(File.OpenRead(file), !file.EndsWith(".pac"))
         {
@@ -109,17 +108,21 @@ namespace BIS.PAA
                 case PAAType.DXT4:
                 case PAAType.DXT5:
                     argbPixels =
-                        PixelFormatConversion.DXTToARGB32(rawData, mipmap.Width, mipmap.Height, (int) paa.Type);
+                        PixelFormatConversion.DXTToARGB32(rawData, mipmap.Width, mipmap.Height, (int)paa.Type);
                     break;
+
                 case PAAType.RGBA_4444:
                     argbPixels = PixelFormatConversion.ARGB16ToARGB32(rawData);
                     break;
+
                 case PAAType.RGBA_5551:
                     argbPixels = PixelFormatConversion.ARGB1555ToARGB32(rawData);
                     break;
+
                 case PAAType.AI88:
                     argbPixels = PixelFormatConversion.AI88ToARGB32(rawData);
                     break;
+
                 default:
                     throw new Exception($"Cannot retrieve pixel data from this PaaType: {paa.Type}");
             }

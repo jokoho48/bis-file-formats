@@ -39,15 +39,15 @@ namespace BIS.Core.Compression
                 {
                     c = input[ip++];
                     if (useSignedChecksum)
-                        csum += (sbyte) c;
+                        csum += (sbyte)c;
                     else
-                        csum += (byte) c;
+                        csum += (byte)c;
 
                     // save byte
-                    dst[iDst++] = (byte) c;
+                    dst[iDst++] = (byte)c;
                     bytesLeft--;
                     // continue decompression
-                    text_buf[r] = (char) c;
+                    text_buf[r] = (char)c;
                     r++;
                     r &= N - 1;
                 }
@@ -69,17 +69,17 @@ namespace BIS.Core.Compression
 
                     for (; ii <= jj; ii++)
                     {
-                        c = (byte) text_buf[ii & (N - 1)];
+                        c = (byte)text_buf[ii & (N - 1)];
                         if (useSignedChecksum)
-                            csum += (sbyte) c;
+                            csum += (sbyte)c;
                         else
-                            csum += (byte) c;
+                            csum += (byte)c;
 
                         // save byte
-                        dst[iDst++] = (byte) c;
+                        dst[iDst++] = (byte)c;
                         bytesLeft--;
                         // continue decompression
-                        text_buf[r] = (char) c;
+                        text_buf[r] = (char)c;
                         r++;
                         r &= N - 1;
                     }
@@ -125,15 +125,15 @@ namespace BIS.Core.Compression
                 {
                     c = input.ReadByte();
                     if (useSignedChecksum)
-                        csum += (sbyte) c;
+                        csum += (sbyte)c;
                     else
-                        csum += (byte) c;
+                        csum += (byte)c;
 
                     // save byte
-                    dst[iDst++] = (byte) c;
+                    dst[iDst++] = (byte)c;
                     bytesLeft--;
                     // continue decompression
-                    text_buf[r] = (char) c;
+                    text_buf[r] = (char)c;
                     r++;
                     r &= N - 1;
                 }
@@ -155,17 +155,17 @@ namespace BIS.Core.Compression
 
                     for (; ii <= jj; ii++)
                     {
-                        c = (byte) text_buf[ii & (N - 1)];
+                        c = (byte)text_buf[ii & (N - 1)];
                         if (useSignedChecksum)
-                            csum += (sbyte) c;
+                            csum += (sbyte)c;
                         else
-                            csum += (byte) c;
+                            csum += (byte)c;
 
                         // save byte
-                        dst[iDst++] = (byte) c;
+                        dst[iDst++] = (byte)c;
                         bytesLeft--;
                         // continue decompression
-                        text_buf[r] = (char) c;
+                        text_buf[r] = (char)c;
                         r++;
                         r &= N - 1;
                     }
@@ -181,7 +181,7 @@ namespace BIS.Core.Compression
                 throw new ArgumentException("Checksum mismatch");
             }
 
-            return (uint) (input.Position - startPos);
+            return (uint)(input.Position - startPos);
         }
     }
 }

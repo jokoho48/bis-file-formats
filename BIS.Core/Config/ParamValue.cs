@@ -30,7 +30,7 @@ namespace BIS.Core.Config
 
         public ParamValue(BinaryReaderEx input)
         {
-            ValueType subtype = (ValueType) input.ReadByte();
+            ValueType subtype = (ValueType)input.ReadByte();
             Name = input.ReadAsciiz();
             Value = new RawValue(input, subtype);
         }

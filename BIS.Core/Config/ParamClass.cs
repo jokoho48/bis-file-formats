@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using BIS.Core.Streams;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BIS.Core.Streams;
 
 namespace BIS.Core.Config
 {
@@ -25,7 +25,7 @@ namespace BIS.Core.Config
         {
         }
 
-        public ParamClass(string name, params ParamEntry[] entries) : this(name, (IEnumerable<ParamEntry>) entries)
+        public ParamClass(string name, params ParamEntry[] entries) : this(name, (IEnumerable<ParamEntry>)entries)
         {
         }
 

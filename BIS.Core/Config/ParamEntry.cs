@@ -1,7 +1,7 @@
 ﻿#region
 
-using System;
 using BIS.Core.Streams;
+using System;
 
 #endregion
 
@@ -15,7 +15,7 @@ namespace BIS.Core.Config
 
         public static ParamEntry ReadParamEntry(BinaryReaderEx input)
         {
-            EntryType entryType = (EntryType) input.ReadByte();
+            EntryType entryType = (EntryType)input.ReadByte();
 
             switch (entryType)
             {
@@ -40,7 +40,6 @@ namespace BIS.Core.Config
 
         public virtual string ToString(int indentionLevel = 0)
         {
-
             return base.ToString();
         }
 

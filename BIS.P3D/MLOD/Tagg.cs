@@ -1,7 +1,7 @@
 ﻿#region
 
-using System;
 using BIS.Core.Streams;
+using System;
 
 #endregion
 
@@ -47,20 +47,28 @@ namespace BIS.P3D.MLOD
             {
                 case "#SharpEdges#":
                     return new SharpEdgesTagg(input);
+
                 case "#Property#":
                     return new PropertyTagg(input);
+
                 case "#Mass#":
                     return new MassTagg(input);
+
                 case "#UVSet#":
                     return new UVSetTagg(input, faces);
+
                 case "#Lock#":
                     return new LockTagg(input, nPoints, faces.Length);
+
                 case "#Selected#":
                     return new SelectedTagg(input, nPoints, faces.Length);
+
                 case "#Animation#":
                     return new AnimationTagg(input);
+
                 case "#EndOfFile#":
                     return new EOFTagg(input);
+
                 default:
                     return new NamedSelectionTagg(input, nPoints, faces.Length);
             }

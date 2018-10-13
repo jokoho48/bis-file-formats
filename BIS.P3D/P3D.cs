@@ -11,7 +11,7 @@ namespace BIS.P3D
     //    public float Resolution { get; protected set; }
 
     //    public string Name
-    //    { 
+    //    {
     //        get { return Resolution.GetLODName(); }
     //    }
 
@@ -70,7 +70,6 @@ namespace BIS.P3D
                           && stream.ReadByte() == 'O'
                           && stream.ReadByte() == 'L';
 
-
             stream.Position = 0;
 
             return result;
@@ -87,7 +86,6 @@ namespace BIS.P3D
                           && stream.ReadByte() == 'L'
                           && stream.ReadByte() == 'O'
                           && stream.ReadByte() == 'D';
-
 
             stream.Position = 0;
 

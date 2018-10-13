@@ -1,5 +1,5 @@
-﻿using System.IO;
-using BIS.Core.Streams;
+﻿using BIS.Core.Streams;
+using System.IO;
 
 namespace BIS.P3D.MLOD
 {

@@ -37,7 +37,7 @@ namespace BIS.P3D.MLOD
                 Vertices[i] = new Vertex(input);
             }
 
-            Flags = (FaceFlags) input.ReadInt32();
+            Flags = (FaceFlags)input.ReadInt32();
             Texture = input.ReadAsciiz();
             Material = input.ReadAsciiz();
         }
@@ -56,7 +56,7 @@ namespace BIS.P3D.MLOD
                     output.Write(0);
                 }
 
-            output.Write((int) Flags);
+            output.Write((int)Flags);
             output.WriteAsciiz(Texture);
             output.WriteAsciiz(Material);
         }

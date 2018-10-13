@@ -41,7 +41,7 @@ namespace BIS.Core.Compression
                 #endregion
             }
 
-            B_3:
+        B_3:
 
             #region B_3
 
@@ -92,11 +92,11 @@ namespace BIS.Core.Compression
                     while (--t > 0);
             }
 
-            #endregion
+        #endregion
 
-            #region f_l_r
+        #region f_l_r
 
-            first_literal_run:
+        first_literal_run:
             t = input[ip++];
             if (t >= 16) goto match;
 
@@ -104,7 +104,7 @@ namespace BIS.Core.Compression
 
             #region B_5
 
-            m_pos = (int) (op - (1 + M2_MAX_OFFSET));
+            m_pos = (int)(op - (1 + M2_MAX_OFFSET));
             m_pos -= t >> 2;
             m_pos -= input[ip++] << 2;
 
@@ -116,9 +116,9 @@ namespace BIS.Core.Compression
 
             goto match_done;
 
-            #endregion
+        #endregion
 
-            match:
+        match:
             if (t >= 64)
             {
                 #region m_1
@@ -252,13 +252,13 @@ namespace BIS.Core.Compression
                 #endregion
             }
 
-            copy_match:
+        copy_match:
             output[op++] = output[m_pos++];
             output[op++] = output[m_pos++];
             do output[op++] = output[m_pos++];
             while (--t > 0);
 
-            match_done:
+        match_done:
             t = input[ip - 2] & 3;
             if (t == 0) goto B_3;
 
@@ -280,10 +280,9 @@ namespace BIS.Core.Compression
             goto match;
         }
 
-
         private static byte ip(Stream i)
         {
-            byte b = (byte) i.ReadByte();
+            byte b = (byte)i.ReadByte();
             i.Position--;
             return b;
         }
@@ -291,14 +290,14 @@ namespace BIS.Core.Compression
         private static byte ip(Stream i, short offset)
         {
             i.Position += offset;
-            byte b = (byte) i.ReadByte();
+            byte b = (byte)i.ReadByte();
             i.Position -= offset + 1;
             return b;
         }
 
         private static byte next(Stream i)
         {
-            return (byte) i.ReadByte();
+            return (byte)i.ReadByte();
         }
 
         public static unsafe uint Decompress(Stream i, byte* output, uint expectedSize)
@@ -323,7 +322,7 @@ namespace BIS.Core.Compression
                 goto first_literal_run;
             }
 
-            B_3:
+        B_3:
             t = next(i);
             if (t >= 16) goto match;
 
@@ -369,7 +368,7 @@ namespace BIS.Core.Compression
                     while (--t > 0);
             }
 
-            first_literal_run:
+        first_literal_run:
             t = next(i);
             if (t >= 16) goto match;
 
@@ -385,7 +384,7 @@ namespace BIS.Core.Compression
 
             goto match_done;
 
-            match:
+        match:
             if (t >= 64)
             {
                 m_pos = op - 1;
@@ -441,11 +440,11 @@ namespace BIS.Core.Compression
                 //compression done?
                 if (m_pos == op)
                 {
-                    int val = (int) (op - output);
+                    int val = (int)(op - output);
                     Debug.Assert(t == 1);
                     if (m_pos != op_end)
                         throw new OverflowException("Output Underrun");
-                    return (uint) (i.Position - startPos);
+                    return (uint)(i.Position - startPos);
                 }
 
                 m_pos -= 0x4000;
@@ -469,13 +468,13 @@ namespace BIS.Core.Compression
 
             if (t >= 2 * 4 - (3 - 1) && op - m_pos >= 4)
             {
-                *(uint*) op = *(uint*) m_pos;
+                *(uint*)op = *(uint*)m_pos;
                 op += 4;
                 m_pos += 4;
                 t -= 4 - (3 - 1);
                 do
                 {
-                    *(uint*) op = *(uint*) m_pos;
+                    *(uint*)op = *(uint*)m_pos;
                     op += 4;
                     m_pos += 4;
                     t -= 4;
@@ -488,13 +487,13 @@ namespace BIS.Core.Compression
                 goto match_done;
             }
 
-            copy_match:
+        copy_match:
             *op++ = *m_pos++;
             *op++ = *m_pos++;
             do *op++ = *m_pos++;
             while (--t > 0);
 
-            match_done:
+        match_done:
             t = ip(i, -2) & 3U;
             if (t == 0) goto B_3;
 
@@ -515,7 +514,6 @@ namespace BIS.Core.Compression
             t = next(i);
             goto match;
         }
-
 
         public static unsafe uint ReadLZO(Stream input, out byte[] dst, uint expectedSize)
         {

@@ -4,7 +4,7 @@ namespace BIS.P3D.MLOD
 {
     public class MassTagg : Tagg
     {
-        public MassTagg(float[] mass) : base((uint) (mass.Length * 4), "#Mass#")
+        public MassTagg(float[] mass) : base((uint)(mass.Length * 4), "#Mass#")
         {
             Mass = mass;
         }

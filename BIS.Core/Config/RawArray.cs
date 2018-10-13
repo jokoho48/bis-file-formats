@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BIS.Core.Streams;
+using System.Collections.Generic;
 using System.Linq;
-using BIS.Core.Streams;
 
 namespace BIS.Core.Config
 {

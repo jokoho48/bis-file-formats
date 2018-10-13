@@ -5,7 +5,7 @@ namespace BIS.P3D.MLOD
 {
     public class AnimationTagg : Tagg
     {
-        public AnimationTagg(float frameTime, Vector3P[] framePoints) : base((uint) (framePoints.Length * 4 + 4),
+        public AnimationTagg(float frameTime, Vector3P[] framePoints) : base((uint)(framePoints.Length * 4 + 4),
             "#Animation#")
         {
             FrameTime = frameTime;

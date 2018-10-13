@@ -1,6 +1,6 @@
-﻿using System;
+﻿using BIS.Core.Streams;
+using System;
 using System.Globalization;
-using BIS.Core.Streams;
 
 namespace BIS.Core.Config
 {
@@ -30,7 +30,7 @@ namespace BIS.Core.Config
             Value = v;
         }
 
-        public RawValue(BinaryReaderEx input) : this(input, (ValueType) input.ReadByte())
+        public RawValue(BinaryReaderEx input) : this(input, (ValueType)input.ReadByte())
         {
         }
 
@@ -43,15 +43,19 @@ namespace BIS.Core.Config
                 case ValueType.Generic:
                     Value = input.ReadAsciiz();
                     break;
+
                 case ValueType.Float:
                     Value = input.ReadSingle();
                     break;
+
                 case ValueType.Int:
                     Value = input.ReadInt32();
                     break;
+
                 case ValueType.Int64:
                     Value = input.ReadInt64();
                     break;
+
                 case ValueType.Array:
                     Value = new RawArray(input);
                     break;
@@ -70,8 +74,10 @@ namespace BIS.Core.Config
                 case ValueType.Expression:
                 case ValueType.Generic:
                     return $"\"{Value}\"";
+
                 case ValueType.Float:
-                    return ((float) Value).ToString(CultureInfo.InvariantCulture);
+                    return ((float)Value).ToString(CultureInfo.InvariantCulture);
+
                 default:
                     return Value.ToString();
             }

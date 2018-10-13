@@ -18,6 +18,7 @@ namespace BIS.Core
 
         //static because it only depends on TElement
         private static int leafLogSizeX;
+
         private static int leafLogSizeY;
 
         private static Func<byte[], int, TElement> readElement;
@@ -58,7 +59,6 @@ namespace BIS.Core
         /// </summary>
         private int sizeY;
 
-
         public QuadTree(int sizeX, int sizeY, BinaryReader input, Func<byte[], int, TElement> readElement,
             int elementSize)
         {
@@ -67,8 +67,8 @@ namespace BIS.Core
 
             CalculateDimensions(sizeX, sizeY);
             allElementsEnumeration = from y in Enumerable.Range(0, SizeY)
-                from x in Enumerable.Range(0, SizeX)
-                select Get(x, y);
+                                     from x in Enumerable.Range(0, SizeX)
+                                     select Get(x, y);
 
             flag = input.ReadBoolean();
 
@@ -103,10 +103,10 @@ namespace BIS.Core
                 throw new ArgumentOutOfRangeException("y");
 
             uint shiftedX =
-                (uint) (x << (8 * sizeof(int) - logSizeTotalX)); // make highest bits accessible on left side
+                (uint)(x << (8 * sizeof(int) - logSizeTotalX)); // make highest bits accessible on left side
             uint shiftedY =
-                (uint) (y << (8 * sizeof(int) - logSizeTotalY)); // make highest bits accessible on left side
-            return flag ? ((QuadTreeNode) root).Get(x, y, shiftedX, shiftedY) : ((QuadTreeLeaf) root).Get(x, y);
+                (uint)(y << (8 * sizeof(int) - logSizeTotalY)); // make highest bits accessible on left side
+            return flag ? ((QuadTreeNode)root).Get(x, y, shiftedX, shiftedY) : ((QuadTreeLeaf)root).Get(x, y);
         }
 
         private void CalculateDimensions(int x, int y)
@@ -136,10 +136,12 @@ namespace BIS.Core
                     leafLogSizeX = 1;
                     leafLogSizeY = 1;
                     break;
+
                 case 2:
                     leafLogSizeX = 1;
                     leafLogSizeY = 0;
                     break;
+
                 case 4:
                     leafLogSizeX = 0;
                     leafLogSizeY = 0;
@@ -163,7 +165,6 @@ namespace BIS.Core
             Debug.Assert(sizeTotalX >= sizeX);
             Debug.Assert(sizeTotalY >= sizeY);
         }
-
 
         private interface IQuadTreeNode
         {
@@ -211,17 +212,17 @@ namespace BIS.Core
                 uint indexX = shiftedX >> (8 * sizeof(int) - logSizeX);
                 uint indexY = shiftedY >> (8 * sizeof(int) - logSizeY);
                 // 2D to 1D array conversion
-                int index = (int) ((indexY << logSizeX) + indexX);
+                int index = (int)((indexY << logSizeX) + indexX);
                 if ((flag & (1 << index)) != 0)
                 {
                     // move shiftedX, shiftedY to make next bits available
-                    return ((QuadTreeNode) subTrees[index]).Get(x, y, shiftedX << logSizeX, shiftedY << logSizeY);
+                    return ((QuadTreeNode)subTrees[index]).Get(x, y, shiftedX << logSizeX, shiftedY << logSizeY);
                 }
 
                 // mask only lowest bits from the original x, y
                 int maskX = (1 << leafLogSizeX) - 1;
                 int maskY = (1 << leafLogSizeY) - 1;
-                return ((QuadTreeLeaf) subTrees[index]).Get(x & maskX, y & maskY);
+                return ((QuadTreeLeaf)subTrees[index]).Get(x & maskX, y & maskY);
             }
         }
 
@@ -239,9 +240,11 @@ namespace BIS.Core
                         case 1:
                             getFunc = (src, x, y) => readElement(src, 0);
                             break;
+
                         case 2:
                             getFunc = (src, x, y) => readElement(src, x * 2);
                             break;
+
                         case 4:
                             getFunc = (src, x, y) => readElement(src, (y << 1) + x);
                             break;

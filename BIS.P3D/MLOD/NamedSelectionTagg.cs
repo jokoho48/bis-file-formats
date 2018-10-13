@@ -5,7 +5,7 @@ namespace BIS.P3D.MLOD
     public class NamedSelectionTagg : Tagg
     {
         public NamedSelectionTagg(string name, byte[] points, byte[] faces) : base(
-            (uint) (points.Length + faces.Length), name)
+            (uint)(points.Length + faces.Length), name)
         {
             Points = points;
             Faces = faces;

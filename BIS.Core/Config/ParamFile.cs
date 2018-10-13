@@ -1,10 +1,10 @@
 ﻿#region
 
+using BIS.Core.Streams;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BIS.Core.Streams;
 
 #endregion
 
@@ -21,8 +21,8 @@ namespace BIS.Core.Config
         {
             BinaryReaderEx input = new BinaryReaderEx(stream);
 
-            char[] sig = {'\0', 'r', 'a', 'P'};
-            if (!input.ReadBytes(4).SequenceEqual(sig.Select(c => (byte) c)))
+            char[] sig = { '\0', 'r', 'a', 'P' };
+            if (!input.ReadBytes(4).SequenceEqual(sig.Select(c => (byte)c)))
                 throw new ArgumentException();
 
             int ofpVersion = input.ReadInt32();

@@ -1,8 +1,8 @@
 ﻿#region
 
+using BIS.Core.Compression;
 using System;
 using System.Runtime.InteropServices;
-using BIS.Core.Compression;
 
 #endregion
 
@@ -12,7 +12,6 @@ namespace BIS.Core.Streams
     {
         private readonly byte[] buffer;
         private int pos;
-
 
         public BufferReader(byte[] buffer)
         {

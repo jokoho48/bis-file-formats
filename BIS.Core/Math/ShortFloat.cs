@@ -17,9 +17,8 @@
 
         public static implicit operator float(ShortFloat d)
         {
-            return (float) d.DoubleValue;
+            return (float)d.DoubleValue;
         }
-
 
         public double DoubleValue
         {
@@ -27,7 +26,7 @@
             {
                 double sign = (value & SIGN_BIT) != 0 ? -1 : 1;
                 int exponent = (value & (SIGN_BIT - 1)) >> MANTISSA_SIZE;
-                double significandbits = (double) (value & (M_MASK - 1)) / M_MASK;
+                double significandbits = (double)(value & (M_MASK - 1)) / M_MASK;
 
                 if (exponent == 0) return sign / 0x4000 * (0 + significandbits);
                 return sign * System.Math.Pow(2, exponent - (E_MASK - 1)) * (1 + significandbits);

@@ -45,10 +45,10 @@ namespace BIS.Core.Math
 
         public static Quaternion ReadCompressed(BinaryReader input)
         {
-            float x = (float) (-input.ReadInt16() / 16384d);
-            float y = (float) (input.ReadInt16() / 16384d);
-            float z = (float) (-input.ReadInt16() / 16384d);
-            float w = (float) (input.ReadInt16() / 16384d);
+            float x = (float)(-input.ReadInt16() / 16384d);
+            float y = (float)(input.ReadInt16() / 16384d);
+            float z = (float)(-input.ReadInt16() / 16384d);
+            float w = (float)(input.ReadInt16() / 16384d);
 
             return new Quaternion(x, y, z, w);
         }
@@ -64,7 +64,7 @@ namespace BIS.Core.Math
 
         public void Normalize()
         {
-            float n = (float) (1 / System.Math.Sqrt(X * X + Y * Y + Z * Z + W * W));
+            float n = (float)(1 / System.Math.Sqrt(X * X + Y * Y + Z * Z + W * W));
             X *= n;
             Y *= n;
             Z *= n;
@@ -95,15 +95,15 @@ namespace BIS.Core.Math
             double zz = Z * Z;
             double yy = Y * Y;
             double xx = X * X;
-            rotMatrix[0, 0] = (float) (1 - 2 * (yy + zz)); //1-2y2-2z2// need .997
-            rotMatrix[0, 1] = (float) (2 * (xy - wz)); //2xy-2wz     -0.033  
-            rotMatrix[0, 2] = (float) (2 * (xz + wy)); ////  2xz+2wy//0.063
-            rotMatrix[1, 0] = (float) (2 * (xy + wz)); //2xy+2wz  0.024      
-            rotMatrix[1, 1] = (float) (1 - 2 * (xx + zz)); //1-2x2-2z2
-            rotMatrix[1, 2] = (float) (2 * (yz - wx)); //2yz+2wx////////////////
-            rotMatrix[2, 0] = (float) (2 * (xz - wy)); //2xz-2wy
-            rotMatrix[2, 1] = (float) (2 * (yz + wx)); //2yz-2wx/////////
-            rotMatrix[2, 2] = (float) (1 - 2 * (xx + yy)); //1-2x2-2y2
+            rotMatrix[0, 0] = (float)(1 - 2 * (yy + zz)); //1-2y2-2z2// need .997
+            rotMatrix[0, 1] = (float)(2 * (xy - wz)); //2xy-2wz     -0.033
+            rotMatrix[0, 2] = (float)(2 * (xz + wy)); ////  2xz+2wy//0.063
+            rotMatrix[1, 0] = (float)(2 * (xy + wz)); //2xy+2wz  0.024
+            rotMatrix[1, 1] = (float)(1 - 2 * (xx + zz)); //1-2x2-2z2
+            rotMatrix[1, 2] = (float)(2 * (yz - wx)); //2yz+2wx////////////////
+            rotMatrix[2, 0] = (float)(2 * (xz - wy)); //2xz-2wy
+            rotMatrix[2, 1] = (float)(2 * (yz + wx)); //2yz-2wx/////////
+            rotMatrix[2, 2] = (float)(1 - 2 * (xx + yy)); //1-2x2-2y2
 
             return rotMatrix;
         }

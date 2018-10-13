@@ -1,9 +1,9 @@
 ﻿#region
 
+using BIS.Core.Streams;
 using System;
 using System.Globalization;
 using System.IO;
-using BIS.Core.Streams;
 
 #endregion
 
@@ -34,9 +34,9 @@ namespace BIS.Core.Math
             if (x > 511) x -= 1024;
             if (y > 511) y -= 1024;
             if (z > 511) z -= 1024;
-            X = (float) (x * scaleFactor);
-            Y = (float) (y * scaleFactor);
-            Z = (float) (z * scaleFactor);
+            X = (float)(x * scaleFactor);
+            Y = (float)(y * scaleFactor);
+            Z = (float)(z * scaleFactor);
         }
 
         public Vector3P(float x, float y, float z)
@@ -70,9 +70,11 @@ namespace BIS.Core.Math
                     case 0:
                         X = value;
                         return;
+
                     case 1:
                         Y = value;
                         return;
+
                     case 2:
                         Z = value;
                         return;
@@ -153,12 +155,12 @@ namespace BIS.Core.Math
         public float Distance(Vector3P v)
         {
             Vector3P d = this - v;
-            return (float) System.Math.Sqrt(d.X * d.X + d.Y * d.Y + d.Z * d.Z);
+            return (float)System.Math.Sqrt(d.X * d.X + d.Y * d.Y + d.Z * d.Z);
         }
 
         public void Normalize()
         {
-            float l = (float) Length;
+            float l = (float)Length;
             X /= l;
             Y /= l;
             Z /= l;

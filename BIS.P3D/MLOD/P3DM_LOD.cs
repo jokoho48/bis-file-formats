@@ -1,9 +1,9 @@
 ﻿#region
 
-using System;
-using System.Collections.Generic;
 using BIS.Core.Math;
 using BIS.Core.Streams;
+using System;
+using System.Collections.Generic;
 
 #endregion
 

@@ -1,11 +1,11 @@
 ﻿#region
 
+using BIS.Core.Streams;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using BIS.Core.Streams;
 
 #endregion
 
@@ -131,7 +131,7 @@ namespace BIS.ALB
             public ALB_Entry(BinaryReaderEx input, int? layerVersion = null)
             {
                 TagID = input.ReadInt16();
-                ALB_Datatype datatype = (ALB_Datatype) input.ReadByte();
+                ALB_Datatype datatype = (ALB_Datatype)input.ReadByte();
                 Value = ALB_Value.ReadALBValue(datatype, input, layerVersion);
             }
 
@@ -149,30 +149,43 @@ namespace BIS.ALB
                 {
                     case ALB_Datatype.Boolean:
                         return new ALB_SimpleValue<bool>(input.ReadBoolean());
+
                     case ALB_Datatype.Character:
                         return new ALB_SimpleValue<char>(input.ReadChar());
+
                     case ALB_Datatype.Float:
                         return new ALB_SimpleValue<float>(input.ReadSingle());
+
                     case ALB_Datatype.DoubleArray:
                         return new ALB_DoubleArray(input);
+
                     case ALB_Datatype.Integer:
                         return new ALB_SimpleValue<int>(input.ReadInt32());
+
                     case ALB_Datatype.Integer2: //mnPriority
                         return new ALB_SimpleValue<int>(input.ReadInt32());
+
                     case ALB_Datatype.Integer3: //objectCount, Hash (uint?)
                         return new ALB_SimpleValue<int>(input.ReadInt32());
+
                     case ALB_Datatype.Integer4:
                         return new ALB_SimpleValue<int>(input.ReadInt32());
+
                     case ALB_Datatype.List:
                         return new ALB_List(input, layerVersion);
+
                     case ALB_Datatype.Object:
                         return new ALB_Object(input);
+
                     case ALB_Datatype.String:
                         return new ALB_SimpleValue<string>(input.ReadAscii());
+
                     case ALB_Datatype.Unknown: //KeyValue?
                         return new ALB_Unknown(input);
+
                     case ALB_Datatype.Unknown2:
                         return new ALB_Unknown2(input);
+
                     case ALB_Datatype.Double:
                         return new ALB_SimpleValue<double>(input.ReadDouble());
 
@@ -249,7 +262,7 @@ namespace BIS.ALB
                 {
                     long pos = input.Position;
                     entries.AddLast(new ALB_Entry(input));
-                    bytesRead += (int) (input.Position - pos);
+                    bytesRead += (int)(input.Position - pos);
                 }
             }
 

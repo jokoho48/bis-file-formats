@@ -1,7 +1,7 @@
 ﻿#region
 
-using System.Linq;
 using BIS.Core.Streams;
+using System.Linq;
 
 #endregion
 
