@@ -1,11 +1,11 @@
 ﻿#region
 
-using BIS.Core.Streams;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using BIS.Core.Streams;
 
 #endregion
 
@@ -131,7 +131,7 @@ namespace BIS.ALB
             public ALB_Entry(BinaryReaderEx input, int? layerVersion = null)
             {
                 TagID = input.ReadInt16();
-                ALB_Datatype datatype = (ALB_Datatype)input.ReadByte();
+                ALB_Datatype datatype = (ALB_Datatype) input.ReadByte();
                 Value = ALB_Value.ReadALBValue(datatype, input, layerVersion);
             }
 
@@ -262,7 +262,7 @@ namespace BIS.ALB
                 {
                     long pos = input.Position;
                     entries.AddLast(new ALB_Entry(input));
-                    bytesRead += (int)(input.Position - pos);
+                    bytesRead += (int) (input.Position - pos);
                 }
             }
 

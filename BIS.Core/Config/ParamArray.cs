@@ -1,5 +1,9 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
 using System.Collections.Generic;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.Core.Config
 {
@@ -17,7 +21,7 @@ namespace BIS.Core.Config
             Array = new RawArray(values);
         }
 
-        public ParamArray(string name, params RawValue[] values) : this(name, (IEnumerable<RawValue>)values)
+        public ParamArray(string name, params RawValue[] values) : this(name, (IEnumerable<RawValue>) values)
         {
         }
 

@@ -1,7 +1,11 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.Core.Config
 {
@@ -25,7 +29,7 @@ namespace BIS.Core.Config
         {
         }
 
-        public ParamClass(string name, params ParamEntry[] entries) : this(name, (IEnumerable<ParamEntry>)entries)
+        public ParamClass(string name, params ParamEntry[] entries) : this(name, (IEnumerable<ParamEntry>) entries)
         {
         }
 
@@ -69,7 +73,9 @@ namespace BIS.Core.Config
                 ? $"{ind}class {Name}"
                 : $"{ind}class {Name} : {BaseClassName}";
 
-            return onlyClassBody ? classBody.ToString() : $@"{classHead}
+            return onlyClassBody
+                ? classBody.ToString()
+                : $@"{classHead}
 {ind}{{
 {classBody}{ind}}};";
         }

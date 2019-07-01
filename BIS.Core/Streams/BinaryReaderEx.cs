@@ -1,9 +1,9 @@
 ﻿#region
 
-using BIS.Core.Compression;
 using System;
 using System.Diagnostics;
 using System.IO;
+using BIS.Core.Compression;
 
 #endregion
 
@@ -11,7 +11,7 @@ namespace BIS.Core.Streams
 {
     public class BinaryReaderEx : BinaryReader
     {
-        public BinaryReaderEx(System.IO.Stream stream) : base(stream)
+        public BinaryReaderEx(Stream stream) : base(stream)
         {
             UseCompressionFlag = false;
         }
@@ -30,14 +30,14 @@ namespace BIS.Core.Streams
 
         public uint ReadUInt24()
         {
-            return (uint)(ReadByte() + (ReadByte() << 8) + (ReadByte() << 16));
+            return (uint) (ReadByte() + (ReadByte() << 8) + (ReadByte() << 16));
         }
 
         public string ReadAscii(int count)
         {
             string str = "";
             for (int index = 0; index < count; ++index)
-                str = str + (char)ReadByte();
+                str = str + (char) ReadByte();
             return str;
         }
 
@@ -51,7 +51,7 @@ namespace BIS.Core.Streams
         {
             string str = "";
             char ch;
-            while ((ch = (char)ReadByte()) != 0)
+            while ((ch = (char) ReadByte()) != 0)
                 str = str + ch;
             return str;
         }
@@ -86,7 +86,7 @@ namespace BIS.Core.Streams
 
             if (!isCompressed)
             {
-                return ReadBytes((int)expectedSize);
+                return ReadBytes((int) expectedSize);
             }
 
             return LZO.ReadLZO(BaseStream, expectedSize);
@@ -96,10 +96,11 @@ namespace BIS.Core.Streams
         {
             if (expectedSize < 1024 && !inPAA) //data is always compressed in PAAs
             {
-                return ReadBytes((int)expectedSize);
+                return ReadBytes((int) expectedSize);
             }
 
-            LZSS.ReadLZSS(BaseStream, out byte[] dst, expectedSize, inPAA); //PAAs calculate checksums with signed byte values
+            LZSS.ReadLZSS(BaseStream, out byte[] dst, expectedSize,
+                inPAA); //PAAs calculate checksums with signed byte values
             return dst;
         }
 
@@ -112,7 +113,7 @@ namespace BIS.Core.Streams
                 byte b = ReadByte();
                 if ((b & 128) != 0)
                 {
-                    byte n = (byte)(b - 127);
+                    byte n = (byte) (b - 127);
                     byte value = ReadByte();
                     for (int j = 0; j < n; j++)
                         result[outputI++] = value;
@@ -167,7 +168,7 @@ namespace BIS.Core.Streams
         public T[] ReadCompressedArray<T>(Func<BinaryReaderEx, T> readElement, int elemSize)
         {
             int nElements = ReadInt32();
-            uint expectedDataSize = (uint)(nElements * elemSize);
+            uint expectedDataSize = (uint) (nElements * elemSize);
             BinaryReaderEx stream = new BinaryReaderEx(new MemoryStream(ReadCompressed(expectedDataSize)));
 
             return stream.ReadArrayBase(readElement, nElements);
@@ -206,7 +207,7 @@ namespace BIS.Core.Streams
                 return result;
             }
 
-            uint expectedDataSize = (uint)(size * sizeOfT);
+            uint expectedDataSize = (uint) (size * sizeOfT);
             using (BinaryReaderEx stream = new BinaryReaderEx(new MemoryStream(ReadCompressed(expectedDataSize))))
             {
                 result = stream.ReadArrayBase(readElement, size);

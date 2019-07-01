@@ -1,7 +1,7 @@
 ﻿#region
 
-using BIS.Core.Streams;
 using System;
+using BIS.Core.Streams;
 
 #endregion
 
@@ -37,7 +37,7 @@ namespace BIS.PAA
             }
 
             DataSize = input.ReadUInt24();
-            DataOffset = (int)input.Position;
+            DataOffset = (int) input.Position;
             input.Position += DataSize; //skip data
         }
 
@@ -52,7 +52,7 @@ namespace BIS.PAA
         {
             input.Position = DataOffset;
 
-            uint expectedSize = (uint)(Width * Height);
+            uint expectedSize = (uint) (Width * Height);
             byte[] data = new byte[expectedSize];
             switch (type)
             {
@@ -64,7 +64,7 @@ namespace BIS.PAA
 
                 case PAAType.P8:
                     return !hasMagicLZW
-                        ? input.ReadCompressedIndices((int)DataSize, expectedSize)
+                        ? input.ReadCompressedIndices((int) DataSize, expectedSize)
                         : input.ReadLZSS(expectedSize, true);
 
                 case PAAType.RGBA_8888:
@@ -78,7 +78,7 @@ namespace BIS.PAA
                 case PAAType.DXT3:
                 case PAAType.DXT4:
                 case PAAType.DXT5:
-                    return !IsLZOCompressed ? input.ReadBytes((int)DataSize) : input.ReadLZO(expectedSize);
+                    return !IsLZOCompressed ? input.ReadBytes((int) DataSize) : input.ReadLZO(expectedSize);
 
                 default: throw new ArgumentException("Unexpected PAA type", nameof(type));
             }

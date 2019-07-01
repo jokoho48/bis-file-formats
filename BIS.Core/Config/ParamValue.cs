@@ -1,4 +1,8 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.Core.Config
 {
@@ -30,7 +34,7 @@ namespace BIS.Core.Config
 
         public ParamValue(BinaryReaderEx input)
         {
-            ValueType subtype = (ValueType)input.ReadByte();
+            ValueType subtype = (ValueType) input.ReadByte();
             Name = input.ReadAsciiz();
             Value = new RawValue(input, subtype);
         }

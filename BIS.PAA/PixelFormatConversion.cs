@@ -1,9 +1,9 @@
 ﻿#region
 
-using BIS.Core;
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using BIS.Core;
 
 #endregion
 
@@ -28,14 +28,14 @@ namespace BIS.PAA
             {
                 byte hbyte = src[index * 2 + 1];
                 byte lbyte = src[index * 2];
-                byte lhbyte = (byte)(hbyte & 0x0F);
-                byte hhbyte = (byte)((hbyte & 0xF0) >> 4);
-                byte llbyte = (byte)(lbyte & 0x0F);
-                byte hlbyte = (byte)((lbyte & 0xF0) >> 4);
-                byte b = (byte)(lhbyte * byte.MaxValue / 15);
-                byte a = (byte)(hhbyte * byte.MaxValue / 15);
-                byte r = (byte)(llbyte * byte.MaxValue / 15);
-                byte g = (byte)(hlbyte * byte.MaxValue / 15);
+                byte lhbyte = (byte) (hbyte & 0x0F);
+                byte hhbyte = (byte) ((hbyte & 0xF0) >> 4);
+                byte llbyte = (byte) (lbyte & 0x0F);
+                byte hlbyte = (byte) ((lbyte & 0xF0) >> 4);
+                byte b = (byte) (lhbyte * byte.MaxValue / 15);
+                byte a = (byte) (hhbyte * byte.MaxValue / 15);
+                byte r = (byte) (llbyte * byte.MaxValue / 15);
+                byte g = (byte) (hlbyte * byte.MaxValue / 15);
 
                 SetColor(dst, index * 4, a, r, g, b);
             }
@@ -51,13 +51,13 @@ namespace BIS.PAA
             {
                 ushort s = BitConverter.ToUInt16(src, index * 2);
                 bool abit = (s & 0x8000) >> 15 == 1;
-                byte b5bit = (byte)((s & 0x7C00) >> 10);
-                byte g5bit = (byte)((s & 0x03E0) >> 5);
-                byte r5bit = (byte)(s & 0x001F);
-                byte b = (byte)(b5bit * byte.MaxValue / 31);
-                byte a = abit ? byte.MaxValue : (byte)0;
-                byte r = (byte)(r5bit * byte.MaxValue / 31);
-                byte g = (byte)(g5bit * byte.MaxValue / 31);
+                byte b5bit = (byte) ((s & 0x7C00) >> 10);
+                byte g5bit = (byte) ((s & 0x03E0) >> 5);
+                byte r5bit = (byte) (s & 0x001F);
+                byte b = (byte) (b5bit * byte.MaxValue / 31);
+                byte a = abit ? byte.MaxValue : (byte) 0;
+                byte r = (byte) (r5bit * byte.MaxValue / 31);
+                byte g = (byte) (g5bit * byte.MaxValue / 31);
 
                 SetColor(dst, index * 4, a, r, g, b);
             }
@@ -179,15 +179,15 @@ namespace BIS.PAA
                                 break;
 
                             case 2:
-                                r = (byte)((2 * r0 + r1) / 3);
-                                g = (byte)((2 * g0 + g1) / 3);
-                                b = (byte)((2 * b0 + b1) / 3);
+                                r = (byte) ((2 * r0 + r1) / 3);
+                                g = (byte) ((2 * g0 + g1) / 3);
+                                b = (byte) ((2 * b0 + b1) / 3);
                                 break;
 
                             case 3:
-                                r = (byte)((r0 + 2 * r1) / 3);
-                                g = (byte)((g0 + 2 * g1) / 3);
-                                b = (byte)((b0 + 2 * b1) / 3);
+                                r = (byte) ((r0 + 2 * r1) / 3);
+                                g = (byte) ((g0 + 2 * g1) / 3);
+                                b = (byte) ((b0 + 2 * b1) / 3);
                                 break;
                         }
                     }
@@ -208,9 +208,9 @@ namespace BIS.PAA
                                 break;
 
                             case 2:
-                                r = (byte)((r0 + r1) / 2);
-                                g = (byte)((g0 + g1) / 2);
-                                b = (byte)((b0 + b1) / 2);
+                                r = (byte) ((r0 + r1) / 2);
+                                g = (byte) ((g0 + g1) / 2);
+                                b = (byte) ((b0 + b1) / 2);
                                 break;
 
                             case 3:
@@ -267,67 +267,67 @@ namespace BIS.PAA
                     switch (alphaIndex)
                     {
                         case 0:
-                            a = (byte)((a0 & 0x0F) | ((a0 & 0x0F) << 4));
+                            a = (byte) ((a0 & 0x0F) | ((a0 & 0x0F) << 4));
                             break;
 
                         case 1:
-                            a = (byte)((a0 & 0xF0) | ((a0 & 0xF0) >> 4));
+                            a = (byte) ((a0 & 0xF0) | ((a0 & 0xF0) >> 4));
                             break;
 
                         case 2:
-                            a = (byte)((a1 & 0x0F) | ((a1 & 0x0F) << 4));
+                            a = (byte) ((a1 & 0x0F) | ((a1 & 0x0F) << 4));
                             break;
 
                         case 3:
-                            a = (byte)((a1 & 0xF0) | ((a1 & 0xF0) >> 4));
+                            a = (byte) ((a1 & 0xF0) | ((a1 & 0xF0) >> 4));
                             break;
 
                         case 4:
-                            a = (byte)((a2 & 0x0F) | ((a2 & 0x0F) << 4));
+                            a = (byte) ((a2 & 0x0F) | ((a2 & 0x0F) << 4));
                             break;
 
                         case 5:
-                            a = (byte)((a2 & 0xF0) | ((a2 & 0xF0) >> 4));
+                            a = (byte) ((a2 & 0xF0) | ((a2 & 0xF0) >> 4));
                             break;
 
                         case 6:
-                            a = (byte)((a3 & 0x0F) | ((a3 & 0x0F) << 4));
+                            a = (byte) ((a3 & 0x0F) | ((a3 & 0x0F) << 4));
                             break;
 
                         case 7:
-                            a = (byte)((a3 & 0xF0) | ((a3 & 0xF0) >> 4));
+                            a = (byte) ((a3 & 0xF0) | ((a3 & 0xF0) >> 4));
                             break;
 
                         case 8:
-                            a = (byte)((a4 & 0x0F) | ((a4 & 0x0F) << 4));
+                            a = (byte) ((a4 & 0x0F) | ((a4 & 0x0F) << 4));
                             break;
 
                         case 9:
-                            a = (byte)((a4 & 0xF0) | ((a4 & 0xF0) >> 4));
+                            a = (byte) ((a4 & 0xF0) | ((a4 & 0xF0) >> 4));
                             break;
 
                         case 10:
-                            a = (byte)((a5 & 0x0F) | ((a5 & 0x0F) << 4));
+                            a = (byte) ((a5 & 0x0F) | ((a5 & 0x0F) << 4));
                             break;
 
                         case 11:
-                            a = (byte)((a5 & 0xF0) | ((a5 & 0xF0) >> 4));
+                            a = (byte) ((a5 & 0xF0) | ((a5 & 0xF0) >> 4));
                             break;
 
                         case 12:
-                            a = (byte)((a6 & 0x0F) | ((a6 & 0x0F) << 4));
+                            a = (byte) ((a6 & 0x0F) | ((a6 & 0x0F) << 4));
                             break;
 
                         case 13:
-                            a = (byte)((a6 & 0xF0) | ((a6 & 0xF0) >> 4));
+                            a = (byte) ((a6 & 0xF0) | ((a6 & 0xF0) >> 4));
                             break;
 
                         case 14:
-                            a = (byte)((a7 & 0x0F) | ((a7 & 0x0F) << 4));
+                            a = (byte) ((a7 & 0x0F) | ((a7 & 0x0F) << 4));
                             break;
 
                         case 15:
-                            a = (byte)((a7 & 0xF0) | ((a7 & 0xF0) >> 4));
+                            a = (byte) ((a7 & 0xF0) | ((a7 & 0xF0) >> 4));
                             break;
                     }
 
@@ -348,15 +348,15 @@ namespace BIS.PAA
                             break;
 
                         case 2:
-                            r = (byte)((2 * r0 + r1) / 3);
-                            g = (byte)((2 * g0 + g1) / 3);
-                            b = (byte)((2 * b0 + b1) / 3);
+                            r = (byte) ((2 * r0 + r1) / 3);
+                            g = (byte) ((2 * g0 + g1) / 3);
+                            b = (byte) ((2 * b0 + b1) / 3);
                             break;
 
                         case 3:
-                            r = (byte)((r0 + 2 * r1) / 3);
-                            g = (byte)((g0 + 2 * g1) / 3);
-                            b = (byte)((b0 + 2 * b1) / 3);
+                            r = (byte) ((r0 + 2 * r1) / 3);
+                            g = (byte) ((g0 + 2 * g1) / 3);
+                            b = (byte) ((b0 + 2 * b1) / 3);
                             break;
                     }
 
@@ -378,11 +378,11 @@ namespace BIS.PAA
             byte alpha1 = imageReader.ReadByte();
 
             ulong alphaMask = imageReader.ReadByte();
-            alphaMask += (ulong)imageReader.ReadByte() << 8;
-            alphaMask += (ulong)imageReader.ReadByte() << 16;
-            alphaMask += (ulong)imageReader.ReadByte() << 24;
-            alphaMask += (ulong)imageReader.ReadByte() << 32;
-            alphaMask += (ulong)imageReader.ReadByte() << 40;
+            alphaMask += (ulong) imageReader.ReadByte() << 8;
+            alphaMask += (ulong) imageReader.ReadByte() << 16;
+            alphaMask += (ulong) imageReader.ReadByte() << 24;
+            alphaMask += (ulong) imageReader.ReadByte() << 32;
+            alphaMask += (ulong) imageReader.ReadByte() << 40;
 
             ushort c0 = imageReader.ReadUInt16();
             ushort c1 = imageReader.ReadUInt16();
@@ -401,7 +401,7 @@ namespace BIS.PAA
                     byte r = 0, g = 0, b = 0, a = 255;
                     uint index = (lookupTable >> (2 * (4 * blockY + blockX))) & 0x03;
 
-                    uint alphaIndex = (uint)((alphaMask >> (3 * (4 * blockY + blockX))) & 0x07);
+                    uint alphaIndex = (uint) ((alphaMask >> (3 * (4 * blockY + blockX))) & 0x07);
                     if (alphaIndex == 0)
                     {
                         a = alpha0;
@@ -412,7 +412,7 @@ namespace BIS.PAA
                     }
                     else if (alpha0 > alpha1)
                     {
-                        a = (byte)(((8 - alphaIndex) * alpha0 + (alphaIndex - 1) * alpha1) / 7);
+                        a = (byte) (((8 - alphaIndex) * alpha0 + (alphaIndex - 1) * alpha1) / 7);
                     }
                     else if (alphaIndex == 6)
                     {
@@ -424,7 +424,7 @@ namespace BIS.PAA
                     }
                     else
                     {
-                        a = (byte)(((6 - alphaIndex) * alpha0 + (alphaIndex - 1) * alpha1) / 5);
+                        a = (byte) (((6 - alphaIndex) * alpha0 + (alphaIndex - 1) * alpha1) / 5);
                     }
 
                     switch (index)
@@ -442,15 +442,15 @@ namespace BIS.PAA
                             break;
 
                         case 2:
-                            r = (byte)((2 * r0 + r1) / 3);
-                            g = (byte)((2 * g0 + g1) / 3);
-                            b = (byte)((2 * b0 + b1) / 3);
+                            r = (byte) ((2 * r0 + r1) / 3);
+                            g = (byte) ((2 * g0 + g1) / 3);
+                            b = (byte) ((2 * b0 + b1) / 3);
                             break;
 
                         case 3:
-                            r = (byte)((r0 + 2 * r1) / 3);
-                            g = (byte)((g0 + 2 * g1) / 3);
-                            b = (byte)((b0 + 2 * b1) / 3);
+                            r = (byte) ((r0 + 2 * r1) / 3);
+                            g = (byte) ((g0 + 2 * g1) / 3);
+                            b = (byte) ((b0 + 2 * b1) / 3);
                             break;
                     }
 
@@ -468,11 +468,11 @@ namespace BIS.PAA
         private static void ConvertRgb565ToRgb888(ushort color, out byte r, out byte g, out byte b)
         {
             int temp = (color >> 11) * 255 + 16;
-            r = (byte)((temp / 32 + temp) / 32);
+            r = (byte) ((temp / 32 + temp) / 32);
             temp = ((color & 0x07E0) >> 5) * 255 + 32;
-            g = (byte)((temp / 64 + temp) / 64);
+            g = (byte) ((temp / 64 + temp) / 64);
             temp = (color & 0x001F) * 255 + 16;
-            b = (byte)((temp / 32 + temp) / 32);
+            b = (byte) ((temp / 32 + temp) / 32);
         }
     }
 }

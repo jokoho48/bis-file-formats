@@ -8,7 +8,7 @@ namespace BIS.Core.Streams
 {
     public class BinaryWriterEx : BinaryWriter
     {
-        public BinaryWriterEx(System.IO.Stream dstStream) : base(dstStream)
+        public BinaryWriterEx(Stream dstStream) : base(dstStream)
         {
         }
 
@@ -21,7 +21,7 @@ namespace BIS.Core.Streams
         public void WriteAscii(string text, uint len)
         {
             Write(text.ToCharArray());
-            uint num = (uint)(len - text.Length);
+            uint num = (uint) (len - text.Length);
             for (int index = 0; index < num; ++index)
                 Write(char.MinValue); //ToDo: check encoding, should always write one byte and never two or more
         }

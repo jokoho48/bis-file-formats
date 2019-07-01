@@ -1,8 +1,8 @@
 ﻿#region
 
-using BIS.Core.Compression;
 using System;
 using System.Runtime.InteropServices;
+using BIS.Core.Compression;
 
 #endregion
 

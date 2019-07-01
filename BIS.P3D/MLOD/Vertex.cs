@@ -1,5 +1,9 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
 using System.IO;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.P3D.MLOD
 {

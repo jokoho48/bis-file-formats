@@ -1,11 +1,11 @@
 ﻿#region
 
-using BIS.Core;
-using BIS.Core.Math;
-using BIS.Core.Streams;
 using System;
 using System.Diagnostics;
 using System.IO;
+using BIS.Core;
+using BIS.Core.Math;
+using BIS.Core.Streams;
 
 #endregion
 
@@ -106,15 +106,15 @@ namespace BIS.WRP
                 2);
 
             if (Version < 21)
-                Random = input.ReadCompressed((uint)(LandRangeX * LandRangeY * 2)); //short values
+                Random = input.ReadCompressed((uint) (LandRangeX * LandRangeY * 2)); //short values
 
             if (Version >= 18)
-                GrassApprox = input.ReadCompressed((uint)(TerrainRangeX * TerrainRangeY)); //byte values
+                GrassApprox = input.ReadCompressed((uint) (TerrainRangeX * TerrainRangeY)); //byte values
 
             if (Version >= 22)
-                PrimTexIndex = input.ReadCompressed((uint)(TerrainRangeX * TerrainRangeY)); //signed byte values?
+                PrimTexIndex = input.ReadCompressed((uint) (TerrainRangeX * TerrainRangeY)); //signed byte values?
 
-            Elevation = input.ReadCompressed((uint)(TerrainRangeX * TerrainRangeY * 4));
+            Elevation = input.ReadCompressed((uint) (TerrainRangeX * TerrainRangeY * 4));
 
             int nMaterials = input.ReadInt32();
             MatNames = new string[nMaterials];
@@ -139,8 +139,8 @@ namespace BIS.WRP
                 (src, off) => BitConverter.ToInt32(src, off), 4);
             int sizeOfMapinfo = input.ReadInt32();
 
-            Persistent = input.ReadCompressed((uint)(LandRangeX * LandRangeY));
-            byte[] subDivHints = input.ReadCompressed((uint)(TerrainRangeX * TerrainRangeY));
+            Persistent = input.ReadCompressed((uint) (LandRangeX * LandRangeY));
+            byte[] subDivHints = input.ReadCompressed((uint) (TerrainRangeX * TerrainRangeY));
 
             MaxObjectId = input.ReadInt32();
             int roadnetSize = input.ReadInt32();

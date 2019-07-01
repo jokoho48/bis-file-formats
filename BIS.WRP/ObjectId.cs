@@ -3,9 +3,9 @@
     public struct ObjectId
     {
         public bool IsObject => ((Id >> 31) & 1) > 0;
-        public short ObjId => (short)(Id & 0b111_1111_1111);
-        public short ObjX => (short)((Id >> 11) & 0b11_1111_1111);
-        public short ObjZ => (short)((Id >> 21) & 0b11_1111_1111);
+        public short ObjId => (short) (Id & 0b111_1111_1111);
+        public short ObjX => (short) ((Id >> 11) & 0b11_1111_1111);
+        public short ObjZ => (short) ((Id >> 21) & 0b11_1111_1111);
 
         public int Id { get; private set; }
 

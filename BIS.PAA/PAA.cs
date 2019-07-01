@@ -1,10 +1,10 @@
 ﻿#region
 
-using BIS.Core.Streams;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using BIS.Core.Streams;
 
 #endregion
 
@@ -108,7 +108,7 @@ namespace BIS.PAA
                 case PAAType.DXT4:
                 case PAAType.DXT5:
                     argbPixels =
-                        PixelFormatConversion.DXTToARGB32(rawData, mipmap.Width, mipmap.Height, (int)paa.Type);
+                        PixelFormatConversion.DXTToARGB32(rawData, mipmap.Width, mipmap.Height, (int) paa.Type);
                     break;
 
                 case PAAType.RGBA_4444:

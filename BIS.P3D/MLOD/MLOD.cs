@@ -1,8 +1,8 @@
 ﻿#region
 
-using BIS.Core.Streams;
 using System;
 using System.IO;
+using BIS.Core.Streams;
 
 #endregion
 

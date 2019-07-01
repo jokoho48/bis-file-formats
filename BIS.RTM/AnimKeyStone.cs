@@ -10,7 +10,7 @@ namespace BIS.RTM
     {
         public AnimKeyStone(BinaryReaderEx input)
         {
-            ID = (AnimKeystoneTypeID)input.ReadInt32();
+            ID = (AnimKeystoneTypeID) input.ReadInt32();
             StringID = input.ReadAsciiz();
             Time = input.ReadSingle();
             Value = input.ReadAsciiz();

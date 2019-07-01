@@ -1,6 +1,10 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
 using System;
 using System.Globalization;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.Core.Config
 {
@@ -30,7 +34,7 @@ namespace BIS.Core.Config
             Value = v;
         }
 
-        public RawValue(BinaryReaderEx input) : this(input, (ValueType)input.ReadByte())
+        public RawValue(BinaryReaderEx input) : this(input, (ValueType) input.ReadByte())
         {
         }
 
@@ -76,7 +80,7 @@ namespace BIS.Core.Config
                     return $"\"{Value}\"";
 
                 case ValueType.Float:
-                    return ((float)Value).ToString(CultureInfo.InvariantCulture);
+                    return ((float) Value).ToString(CultureInfo.InvariantCulture);
 
                 default:
                     return Value.ToString();

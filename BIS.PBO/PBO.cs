@@ -1,11 +1,11 @@
 ﻿#region
 
-using BIS.Core;
-using BIS.Core.Streams;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BIS.Core;
+using BIS.Core.Streams;
 
 #endregion
 
@@ -96,7 +96,7 @@ namespace BIS.PBO
                     FileEntries.AddLast(pboEntry);
             } while (pboEntry.FileName != "" || FileEntries.Count == 0);
 
-            DataOffset = (int)input.Position;
+            DataOffset = (int) input.Position;
         }
 
         private byte[] GetFileData(FileEntry entry)
@@ -114,7 +114,7 @@ namespace BIS.PBO
                     throw new Exception("Unexpected packingMethod");
 
                 BinaryReaderEx br = new BinaryReaderEx(PBOFileStream);
-                bytes = br.ReadLZSS((uint)entry.UncompressedSize);
+                bytes = br.ReadLZSS((uint) entry.UncompressedSize);
             }
 
             return bytes;
@@ -199,7 +199,7 @@ namespace BIS.PBO
                 output.WriteAsciiz(e);
             }
 
-            output.Write((byte)0); //empty string
+            output.Write((byte) 0); //empty string
         }
 
         private void WriteHeader(BinaryWriterEx output)

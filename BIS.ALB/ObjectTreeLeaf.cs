@@ -1,5 +1,9 @@
-﻿using BIS.Core.Streams;
+﻿#region
+
 using System.Text;
+using BIS.Core.Streams;
+
+#endregion
 
 namespace BIS.ALB
 {

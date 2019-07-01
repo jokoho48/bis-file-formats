@@ -27,7 +27,7 @@ namespace BIS.PAA
             }
             else if (swizzle[ch] <= TexSwizzle.TSBlue)
             {
-                invSwizzle[(int)swizzle[ch]] = swiz;
+                invSwizzle[(int) swizzle[ch]] = swiz;
             }
         }
 
@@ -68,7 +68,7 @@ namespace BIS.PAA
                     break;
             }
 
-            int offset = swiz < TexSwizzle.TSOne ? 24 - (int)swiz * 8 : 0;
+            int offset = swiz < TexSwizzle.TSOne ? 24 - (int) swiz * 8 : 0;
 
             return (offset, mul, add);
         }
@@ -96,10 +96,10 @@ namespace BIS.PAA
                 int g = (p >> gOffset) & 0xff;
                 int b = (p >> bOffset) & 0xff;
 
-                argbPixels[pixOffset] = (byte)(b * mulB + addB);
-                argbPixels[pixOffset + 1] = (byte)(g * mulG + addG);
-                argbPixels[pixOffset + 2] = (byte)(r * mulR + addR);
-                argbPixels[pixOffset + 3] = (byte)(a * mulA + addA);
+                argbPixels[pixOffset] = (byte) (b * mulB + addB);
+                argbPixels[pixOffset + 1] = (byte) (g * mulG + addG);
+                argbPixels[pixOffset + 2] = (byte) (r * mulR + addR);
+                argbPixels[pixOffset + 3] = (byte) (a * mulA + addA);
             }
         }
     }
